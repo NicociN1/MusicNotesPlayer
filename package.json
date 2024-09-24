@@ -21,6 +21,7 @@
     "get-youtube-id": "^1.0.1",
     "next": "14.2.13",
     "react": "^18",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^18",
     "react-draggable": "^4.4.6",
     "react-player": "^2.16.0"

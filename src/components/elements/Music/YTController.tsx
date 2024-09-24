@@ -8,10 +8,12 @@ import {
 	Pause,
 	PlayArrow,
 	SkipPrevious,
+	VolumeOff,
 	VolumeUp,
 } from "@mui/icons-material";
 import { IconButton, Slider, Tooltip } from "@mui/material";
 import { useState } from "react";
+import { isMobile } from "react-device-detect";
 
 const RowContentsContainer = styled.div`
   display: flex;
@@ -49,11 +51,12 @@ const AnimateSlider = styled(Slider)`
 `;
 
 const YouTubeController = () => {
-	const { iFrameRef, onProgress, onPlayerStateChange } = useYouTubeGlobal();
 	const { volume, setVolume } = useYouTubeVolume();
-	const [isPlaying, setPlaying] = useState<boolean>(false);
+	const [isMuted, setMute] = useState<boolean>(false);
 	const [sliderTime, setSliderTime] = useState<number>(0);
+	const [isPlaying, setPlaying] = useState<boolean>(false);
 	const [isVisibleVolume, setVisibleVolume] = useState<boolean>(false);
+	const { iFrameRef, onProgress, onPlayerStateChange } = useYouTubeGlobal();
 
 	const seekTo = (time: number, seekEnd = true) => {
 		const iFrame = iFrameRef.current;
@@ -101,6 +104,19 @@ const YouTubeController = () => {
 		setVolume(volume);
 		iFrame.getInternalPlayer().setVolume(volume);
 	};
+	const clickToggleMute = () => {
+		const iFrame = iFrameRef.current;
+		if (!iFrame) return;
+		const _isMuted = isMuted;
+		setMute(!isMuted);
+		if (_isMuted) {
+			setVolume(100);
+			iFrame.getInternalPlayer().unMute();
+		} else {
+			setVolume(0);
+			iFrame.getInternalPlayer().mute();
+		}
+	};
 
 	onProgress.current = (time: number) => {
 		setSliderTime(time);
@@ -147,10 +163,24 @@ const YouTubeController = () => {
 					/>
 				</IconButton>
 				<IconButton>
-					<VolumeUp
-						sx={{ fontSize: "40px", color: "white" }}
-						onClick={() => setVisibleVolume(!isVisibleVolume)}
-					/>
+					{!isMuted ? (
+						<VolumeUp
+							sx={{ fontSize: "40px", color: "white" }}
+							onClick={() => {
+								console.log(isMobile);
+								if (!isMobile) {
+									setVisibleVolume(!isVisibleVolume);
+								} else {
+									clickToggleMute();
+								}
+							}}
+						/>
+					) : (
+						<VolumeOff
+							sx={{ fontSize: "40px", color: "white" }}
+							onClick={() => clickToggleMute()}
+						/>
+					)}
 				</IconButton>
 				<AnimateSlider
 					min={0}
