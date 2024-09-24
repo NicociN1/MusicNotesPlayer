@@ -11,7 +11,7 @@ const YouTubePlayerWrapper = styled.div`
   transition: 0.3s width ease-in-out, 0.3s height ease-in-out;
 	background-color: #222;
 	position: absolute;
-	bottom: calc(100%);
+	bottom: 100%;
 `;
 
 const YouTubeIFrame = () => {
