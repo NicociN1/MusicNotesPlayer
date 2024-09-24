@@ -63,6 +63,11 @@ const YouTubeController = () => {
 		if (!iFrame) return;
 		iFrame.getInternalPlayer().seekTo(time, true);
 		setSliderTime(time);
+		if (!seekEnd) {
+			iFrame.getInternalPlayer().pause();
+		} else {
+			iFrame.getInternalPlayer().play();
+		}
 	};
 
 	const clickPlay = () => {

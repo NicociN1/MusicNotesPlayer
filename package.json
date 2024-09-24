@@ -9,7 +9,8 @@
     "lint": "biome lint --apply .",
     "format": "biome format .",
     "check": "biome check --apply .",
-    "commit": "git add . && cz && git push -u origin main"
+    "deploy": "git add . && cz && git push -u origin main",
+    "predeploy": "git add . && cz && git push -u origin preview"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
