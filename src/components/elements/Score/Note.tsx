@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Resizable } from "react-resizable";
 
@@ -19,6 +19,8 @@ const NoteWrapper = styled.div`
   justify-content: center;
   align-items: center;
   position: absolute;
+	top: 0;
+	left: 0;
 `;
 
 const NoteContainer = styled.div`
@@ -49,20 +51,15 @@ const StyledInput = styled.input`
 `;
 
 const Note = (props: NoteProps) => {
-	const [position, setPosition] = useState<{ x: number; y: number }>({
+	const position = useRef<{ x: number; y: number }>({
 		x: props.x * props.beatSize,
 		y: props.y * props.noteSize,
 	});
 
 	return (
-		<Draggable
-			grid={[props.beatSize / 4, props.noteSize]}
-			position={{ x: position.x, y: position.y }}
-		>
+		<Draggable grid={[props.beatSize / 4, props.noteSize]} position={position.current}>
 			<NoteWrapper
 				style={{
-					top: position.y,
-					left: position.x,
 					width: props.beatSize * props.beatCount + 2,
 					height: props.noteSize,
 				}}
