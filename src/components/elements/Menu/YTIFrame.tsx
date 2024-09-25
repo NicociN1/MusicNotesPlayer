@@ -10,13 +10,11 @@ const YouTubePlayerWrapper = styled.div`
   box-shadow: 0 0 8px black;
   transition: 0.3s width ease-in-out, 0.3s height ease-in-out;
 	background-color: #222;
-	position: absolute;
 	bottom: 100%;
 `;
 
 const YouTubeIFrame = () => {
-	const { url, iFrameRef, onProgress, onPlayerStateChange } =
-		useYouTubeGlobal();
+	const { url, iFrameRef, onProgress, onPlayerStateChange } = useYouTubeGlobal();
 	const { visibleIFrame } = useUIVisibility();
 
 	return (

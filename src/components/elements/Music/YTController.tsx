@@ -12,7 +12,7 @@ import {
 	VolumeUp,
 } from "@mui/icons-material";
 import { IconButton, Slider, Tooltip } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { isMobile } from "react-device-detect";
 
 const RowContentsContainer = styled.div`
@@ -27,10 +27,10 @@ const AnimateSlider = styled(Slider)`
 
   &.show {
     visibility: visible;
-    animation: fadeIn 0.3s forwards;
+    animation: fadeIn 0.1s forwards;
   }
   &.hide {
-    animation: fadeOut 0.3s forwards;
+    animation: fadeOut 0.1s forwards;
   }
   @keyframes fadeOut {
     0% {
@@ -57,6 +57,7 @@ const YouTubeController = () => {
 	const [isPlaying, setPlaying] = useState<boolean>(false);
 	const [isVisibleVolume, setVisibleVolume] = useState<boolean>(false);
 	const { iFrameRef, onProgress, onPlayerStateChange } = useYouTubeGlobal();
+	const beforePlaying = useRef<boolean | null>(null);
 
 	const seekTo = (time: number, seekEnd = true) => {
 		const iFrame = iFrameRef.current;
@@ -64,9 +65,13 @@ const YouTubeController = () => {
 		iFrame.getInternalPlayer().seekTo(time, true);
 		setSliderTime(time);
 		if (!seekEnd) {
-			iFrame.getInternalPlayer().pause();
-		} else {
-			iFrame.getInternalPlayer().play();
+			if (beforePlaying.current == null) {
+				beforePlaying.current = iFrame.getInternalPlayer().getPlayerState() === 1;
+			}
+			iFrame.getInternalPlayer().pauseVideo();
+		} else if (beforePlaying.current) {
+			iFrame.getInternalPlayer().playVideo();
+			beforePlaying.current = null;
 		}
 	};
 
@@ -136,57 +141,67 @@ const YouTubeController = () => {
 	return (
 		<>
 			<RowContentsContainer>
-				<IconButton>
-					<SkipPrevious
-						sx={{ fontSize: "40px", color: "white" }}
-						onClick={() => clickPrev()}
-					/>
-				</IconButton>
-				<IconButton>
-					<FastRewind
-						sx={{ fontSize: "40px", color: "white" }}
-						onClick={() => clickRewind()}
-					/>
-				</IconButton>
-				<IconButton>
-					{isPlaying ? (
-						<Pause
-							sx={{ fontSize: "64px", color: "white" }}
-							onClick={() => clickPause()}
-						/>
-					) : (
-						<PlayArrow
-							sx={{ fontSize: "64px", color: "white" }}
-							onClick={() => clickPlay()}
-						/>
-					)}
-				</IconButton>
-				<IconButton>
-					<FastForward
-						sx={{ fontSize: "40px", color: "white" }}
-						onClick={() => clickForward()}
-					/>
-				</IconButton>
-				<IconButton>
-					{!isMuted ? (
-						<VolumeUp
+				<Tooltip placement="top" title="Restart">
+					<IconButton aria-label="Restart">
+						<SkipPrevious
 							sx={{ fontSize: "40px", color: "white" }}
-							onClick={() => {
-								console.log(isMobile);
-								if (!isMobile) {
-									setVisibleVolume(!isVisibleVolume);
-								} else {
-									clickToggleMute();
-								}
-							}}
+							onClick={() => clickPrev()}
 						/>
-					) : (
-						<VolumeOff
+					</IconButton>
+				</Tooltip>
+				<Tooltip placement="top" title="Skip Rewind">
+					<IconButton aria-label="Skip Rewind">
+						<FastRewind
 							sx={{ fontSize: "40px", color: "white" }}
-							onClick={() => clickToggleMute()}
+							onClick={() => clickRewind()}
 						/>
-					)}
-				</IconButton>
+					</IconButton>
+				</Tooltip>
+				<Tooltip placement="top" title={isPlaying ? "Pause" : "Play"}>
+					<IconButton aria-label={isPlaying ? "Pause" : "Play"}>
+						{isPlaying ? (
+							<Pause
+								sx={{ fontSize: "64px", color: "white" }}
+								onClick={() => clickPause()}
+							/>
+						) : (
+							<PlayArrow
+								sx={{ fontSize: "64px", color: "white" }}
+								onClick={() => clickPlay()}
+							/>
+						)}
+					</IconButton>
+				</Tooltip>
+				<Tooltip placement="top" title="Skip Forward">
+					<IconButton aria-label="Skip Forward">
+						<FastForward
+							sx={{ fontSize: "40px", color: "white" }}
+							onClick={() => clickForward()}
+						/>
+					</IconButton>
+				</Tooltip>
+				<Tooltip placement="top" title="Change Volume">
+					<IconButton aria-label="Change Volume">
+						{!isMuted ? (
+							<VolumeUp
+								sx={{ fontSize: "40px", color: "white" }}
+								onClick={() => {
+									console.log(isMobile);
+									if (!isMobile) {
+										setVisibleVolume(!isVisibleVolume);
+									} else {
+										clickToggleMute();
+									}
+								}}
+							/>
+						) : (
+							<VolumeOff
+								sx={{ fontSize: "40px", color: "white" }}
+								onClick={() => clickToggleMute()}
+							/>
+						)}
+					</IconButton>
+				</Tooltip>
 				<AnimateSlider
 					min={0}
 					step={1}

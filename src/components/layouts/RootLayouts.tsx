@@ -10,7 +10,7 @@ export const MenuBarLayout = styled.div`
   position: absolute;
   position: fixed;
   width: 100vw;
-  height: 60px;
+  height: 80px;
   top: 0;
   left: 0;
 `;
@@ -24,13 +24,11 @@ export const MusicControlBarLayout = styled.div`
   bottom: 16px;
 `;
 
-export const ScoreLayout = styled.div`
+export const ScoresLayout = styled.div`
   width: 100vw;
-  height: calc(100vh - 60px);
-  /* overflow-y: scroll;
-  overflow-x: hidden; */
+  height: calc(100vh - 80px);
   position: absolute;
-  margin-top: 60px;
+  top: 80px;
 `;
 
 export const YouTubePlayerLayout = styled.div`

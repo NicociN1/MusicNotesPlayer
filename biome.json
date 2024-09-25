@@ -7,11 +7,14 @@
       "recommended": true,
       "style": {
         "noVar": "error",
-        "useImportType": "off"
+        "useImportType": "off",
+        "useSelfClosingElements": "warn",
+        "noUnusedTemplateLiteral": "warn"
       },
       "suspicious": {
         "noEmptyInterface": "off",
-        "noSuspiciousSemicolonInJsx": "warn"
+        "noSuspiciousSemicolonInJsx": "warn",
+        "noArrayIndexKey": "warn"
       },
       "complexity": {
         "noBannedTypes": "off"
@@ -21,7 +24,7 @@
   "formatter": {
     "enabled": true,
     "indentWidth": 2,
-    "lineWidth": 80,
+    "lineWidth": 90,
     "useEditorconfig": true
   }
 }
