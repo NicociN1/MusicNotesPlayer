@@ -1,8 +1,8 @@
+import { useScoresGlobal } from "@/hooks/ScoresGlobal";
 import styled from "@emotion/styled";
 import { Add, MusicVideo } from "@mui/icons-material";
-import Menu from "@mui/icons-material/Menu";
 import { IconButton, Tooltip } from "@mui/material";
-import { ReactNode, useRef, useState } from "react";
+import { useState } from "react";
 import YouTubeIFrame from "./YTIFrame";
 
 const ControlBarWrapper = styled.div`
@@ -18,7 +18,7 @@ const ButtonGrid = styled.div`
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, 64px) 64px;
-  grid-template-rows: repeat(auto-fill, 80px);
+  grid-template-rows: repeat(auto-fill, 70px);
 `;
 const YouTubeIframeContainer = styled.div`
   width: 100vw;
@@ -32,12 +32,26 @@ const YouTubeIframeContainer = styled.div`
 
 const MenuBar = () => {
 	const [isOpened, setOpen] = useState<boolean>(false);
+	const { addScore, createNewId } = useScoresGlobal();
 
 	return (
 		<ControlBarWrapper style={{ maxHeight: isOpened ? "400px" : "100%" }}>
 			<ButtonGrid>
 				<Tooltip title="Create Score">
-					<IconButton sx={{ color: "white" }}>
+					<IconButton
+						sx={{ color: "white" }}
+						onClick={() => {
+							addScore({
+								beatCount: 4,
+								beatSize: 256,
+								lineCount: 6,
+								measureCount: 3,
+								notesSize: 40,
+								id: createNewId(),
+								notes: [],
+							});
+						}}
+					>
 						<Add fontSize="large" />
 					</IconButton>
 				</Tooltip>

@@ -9,14 +9,15 @@
     "lint": "biome lint --apply .",
     "format": "biome format .",
     "check": "biome check --apply .",
-    "deploy": "git add . && cz && git push -u origin main",
-    "predeploy": "git add . && cz && git push -u origin preview"
+    "deploy": "git add . && cz && echo \"Please run \"git push -u origin main\"\""
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.1",
+    "@radix-ui/react-context-menu": "^2.2.1",
+    "@radix-ui/react-dialog": "^1.1.1",
     "@types/react-resizable": "^3.0.8",
     "@types/youtube": "^0.1.0",
     "antd": "^5.20.6",

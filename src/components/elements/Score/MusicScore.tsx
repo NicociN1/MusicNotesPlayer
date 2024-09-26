@@ -15,8 +15,8 @@ const MusicScore = () => {
 
 	return (
 		<MusicScoreWrapper>
-			{scores.map((s, index) => (
-				<Score {...s} key={index} />
+			{scores.map((s) => (
+				<Score {...s} key={s.id} />
 			))}
 		</MusicScoreWrapper>
 	);

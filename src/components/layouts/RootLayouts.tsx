@@ -10,23 +10,23 @@ export const MenuBarLayout = styled.div`
   position: absolute;
   position: fixed;
   width: 100vw;
-  height: 80px;
+  height: 70px;
   top: 0;
   left: 0;
 `;
 
 export const MusicControlBarLayout = styled.div`
   width: 100vw;
-  height: 140px;
+  height: 120px;
   display: flex;
   justify-content: center;
-  position: fixed;
-  bottom: 16px;
+  position: absolute;
+  bottom: 0;
 `;
 
 export const ScoresLayout = styled.div`
   width: 100vw;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 80px - 120px);
   position: absolute;
   top: 80px;
 `;

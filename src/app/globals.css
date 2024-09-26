@@ -25,3 +25,64 @@
     text-wrap: balance;
   }
 }
+
+body {
+  overflow: hidden;
+}
+
+.ContextMenuContent,
+.ContextMenuSubContent {
+  min-width: 220px;
+  background-color: white;
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 5px;
+  box-shadow: 4px 4px 40px -10px rgba(0, 0, 0, 0.5);
+  user-select: none;
+}
+
+.ContextMenuItem,
+.ContextMenuCheckboxItem,
+.ContextMenuRadioItem,
+.ContextMenuSubTrigger {
+  font-size: 16px;
+  line-height: 1;
+  color: black;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 5px;
+  position: relative;
+  padding-left: 25px;
+  user-select: none;
+  outline: none;
+}
+
+.ContextMenuItem[data-highlighted],
+.ContextMenuCheckboxItem[data-highlighted],
+.ContextMenuRadioItem[data-highlighted],
+.ContextMenuSubTrigger[data-highlighted] {
+  background-color: lightgray;
+}
+
+.ContextMenuSeparator {
+  height: 1px;
+  background-color: black;
+  margin: 5px;
+}
+
+.ContextMenuItemIndicator {
+  position: absolute;
+  left: 0;
+  width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.RightSlot {
+  margin-left: auto;
+  padding-left: 20px;
+  color: black;
+}

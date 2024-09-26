@@ -224,7 +224,7 @@ const YouTubeController = () => {
 					onChange={(ev, data) => sliderSeek(data as number)}
 					onChangeCommitted={(ev, data) => sliderSeekEnd(data as number)}
 					sx={{
-						maxWidth: "min(450px, max(100vw - 128px, 230px))",
+						maxWidth: "max(calc(80%), 300px)",
 						color: "white",
 					}}
 				/>

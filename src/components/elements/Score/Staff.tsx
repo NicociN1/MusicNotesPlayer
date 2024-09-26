@@ -7,10 +7,11 @@ export interface StaffProps {
 	beatCount: number;
 	measureCount: number;
 	lineCount: number;
+	scoreId: number;
 }
 
 const Staff = (props: StaffProps) => {
-	const { setNotes, notes } = useScoresGlobal();
+	const { createNewId: createId, addNote } = useScoresGlobal();
 
 	const StaffWrapper = styled.div`
     display: grid;
@@ -23,7 +24,7 @@ const Staff = (props: StaffProps) => {
 	const Line = styled.div`
     border-right: solid 4px black;
 		&:hover {
-			background-color: #00bbff44;
+			background-color: #00000022;
 		}
 		&::before {
 			content: "";
@@ -35,36 +36,34 @@ const Staff = (props: StaffProps) => {
 		}
   `;
 
-	useEffect(() => {
-		console.log("Staff", console.log(notes.map((x) => x.x)));
-	});
-
 	return (
 		<StaffWrapper>
 			{Array.from({ length: props.measureCount * props.lineCount }, (_v, index) => {
 				const row = (index % props.measureCount) * props.beatCount;
 				const column = Math.floor(index / props.measureCount);
-				const note: NoteProps = {
-					x: row,
-					y: column,
-					backgroundColor: "lime",
-					beatCount: 4,
-					beatSize: 64,
-					color: "white",
-					defaultLabel: "1",
-					noteSize: 32,
-				};
 				return (
 					<Line
-						key="key"
-						onClick={() =>
-							setNotes((notes) => {
-								const newNotes = notes;
-								newNotes.push(note);
-								console.log(notes);
-								return [...newNotes];
-							})
-						}
+						key={index}
+						onClick={() => {
+							console.log("onClick");
+							let added = false;
+							if (!added) {
+								added = true;
+								const note: NoteProps = {
+									x: row,
+									y: column,
+									backgroundColor: "black",
+									beatCount: 4,
+									beatSize: 64,
+									color: "white",
+									label: "1",
+									noteSize: 32,
+									scoreId: -1,
+									id: createId(),
+								};
+								addNote(props.scoreId, note);
+							}
+						}}
 					/>
 				);
 			})}

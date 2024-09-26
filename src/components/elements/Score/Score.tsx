@@ -2,8 +2,9 @@ import { useScoresGlobal } from "@/hooks/ScoresGlobal";
 import styled from "@emotion/styled";
 import { DragHandle, DragIndicator, PanTool } from "@mui/icons-material";
 import { Input } from "antd";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import Draggable from "react-draggable";
+import ScoreContextMenu from "../ContextMenu/ScoreContextMenu";
 import Note, { NoteProps } from "./Note";
 import Staff, { StaffProps } from "./Staff";
 
@@ -14,7 +15,7 @@ const DraggableWrapper = styled.div`
 `;
 const ScoreContainer = styled.div`
 	display: grid;
-	padding: 16px;
+	padding: 32px;
 `;
 const LabelWrapper = styled.div`
 	display: grid;
@@ -24,16 +25,15 @@ const LabelWrapper = styled.div`
 const DragHandleBar = styled.div`
 	border-bottom: solid 1px lightgray;
 	background-color: #d3d3d344;
-	cursor: move;
+	cursor: pointer;
 	width: 100%;
-	height: 16px;
+	height: 24px;
 `;
 const StyledInput = styled.input`
 	width: 100%;
 	height: 100%;
 	background-color: transparent;
 	text-align: center;
-	font-size: 1.1em;
 	grid-column: 1;
 	outline: none;
 	border: solid 1px lightgrey;
@@ -46,15 +46,12 @@ export interface ScoreProps {
 	lineCount: number;
 	beatSize: number;
 	notesSize: number;
+	notes: NoteProps[];
+	id: number;
 }
 
 const Score = (props: ScoreProps) => {
 	const [isDragging, setDragging] = useState<boolean>(false);
-	const { notes, setNotes } = useScoresGlobal();
-
-	useEffect(() => {
-		console.log("Score", console.log(notes.map((x) => x.x)));
-	});
 
 	return (
 		<Draggable
@@ -65,12 +62,14 @@ const Score = (props: ScoreProps) => {
 		>
 			<DraggableWrapper
 				style={{
-					boxShadow: `0 0 ${isDragging ? 20 : 8}px #00000088`,
+					boxShadow: `0 0 ${isDragging ? 36 : 16}px -2px #00000088`,
 					backgroundColor: isDragging ? "#ffffff88" : "white",
 					zIndex: isDragging ? 1 : 0,
 				}}
 			>
-				<DragHandleBar className="drag-handle" />
+				<ScoreContextMenu scoreId={props.id}>
+					<DragHandleBar className="drag-handle" />
+				</ScoreContextMenu>
 				<ScoreContainer
 					style={{
 						gridTemplateColumns: `${props.notesSize}px ${props.beatSize * props.beatCount * props.measureCount}px`,
@@ -85,7 +84,13 @@ const Score = (props: ScoreProps) => {
 						}}
 					>
 						{Array.from({ length: props.lineCount }, (_v, i) => (
-							<StyledInput type="text" key="key" />
+							<StyledInput
+								type="text"
+								key={i}
+								style={{
+									fontSize: `${props.notesSize * 0.7}px`,
+								}}
+							/>
 						))}
 					</LabelWrapper>
 					<div
@@ -99,13 +104,14 @@ const Score = (props: ScoreProps) => {
 							beatCount={props.beatCount}
 							lineCount={props.lineCount}
 							measureCount={props.measureCount}
+							scoreId={props.id}
 						/>
-						{notes.map((n) => (
+						{props.notes.map((n) => (
 							<Note
 								{...n}
 								noteSize={props.notesSize}
 								beatSize={props.beatSize}
-								key="key"
+								key={n.id}
 							/>
 						))}
 					</div>
