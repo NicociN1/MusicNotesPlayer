@@ -1,9 +1,11 @@
 import { useScoresGlobal } from "@/hooks/ScoresGlobal";
+import styles from "@/styles/ContextMenu.module.css";
 import styled from "@emotion/styled";
 import { ChevronRight, Circle, Square } from "@mui/icons-material";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import { ContextMenuRadioItem } from "@radix-ui/react-context-menu";
 import { useState } from "react";
+import LabelEditDialog from "../Dialog/LabelEditDialog";
 
 const colorItems = [
 	{
@@ -102,13 +104,13 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 		updateNote(props.scoreId, { ...noteProps, backgroundColor: color });
 	};
 	const handleEditLabel = () => {};
-	const handleDupilicate = () => {
+	const handleDuplicate = () => {
 		const noteProps = getNote(props.scoreId, props.noteId);
 		if (!noteProps) return;
 		const newId = createNewId();
 		console.log(noteProps.x);
 
-		const newNote = { ...noteProps, id: newId, x: noteProps.x + 1 };
+		const newNote = { ...noteProps, id: newId, x: noteProps.x + 1, y: noteProps.y };
 		console.log(newNote);
 		addNote(props.scoreId, newNote);
 	};
@@ -121,132 +123,165 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 	const [color, setColor] = useState("white");
 	const [backgroundColor, setBackgroundColor] = useState("black");
 	const [beat, setBeat] = useState("1");
+	const [labelDialogOpen, setLabelDialogOpen] = useState(false);
 
 	return (
-		<ContextMenu.Root>
-			<ContextMenu.Trigger>{props.children}</ContextMenu.Trigger>
-			<ContextMenu.Portal>
-				<ContextMenu.Content className="ContextMenuContent">
-					<ContextMenu.Sub>
-						<ContextMenu.SubTrigger className="ContextMenuSubTrigger">
-							背景色
-							<div className="RightSlot">
-								<ChevronRight />
-							</div>
-						</ContextMenu.SubTrigger>
-						<ContextMenu.Portal>
-							<ContextMenu.SubContent className="ContextMenuSubContent">
-								<ContextMenu.RadioGroup value={backgroundColor}>
-									{colorItems.map((v) => (
-										<ContextMenuRadioItem
-											className="ContextMenuItem"
-											value={v.value}
-											key={v.key}
-											onClick={(e) => {
-												e.preventDefault();
-												handleChangeBackgroundColor(v.value);
-												setBackgroundColor(v.value);
-											}}
-										>
-											{v.label}
-											<div className="RightSlot" style={{ color: v.value }}>
-												<Square />
-											</div>
-											<ContextMenu.ItemIndicator className="ContextMenuItemIndicator">
-												<Circle sx={{ fontSize: 8 }} />
-											</ContextMenu.ItemIndicator>
-										</ContextMenuRadioItem>
-									))}
-								</ContextMenu.RadioGroup>
-							</ContextMenu.SubContent>
-						</ContextMenu.Portal>
-					</ContextMenu.Sub>
+		<>
+			<LabelEditDialog
+				open={labelDialogOpen}
+				noteId={props.noteId}
+				scoreId={props.scoreId}
+				onOpenChange={(open) => {
+					setLabelDialogOpen(open);
+				}}
+			/>
+			<ContextMenu.Root>
+				<ContextMenu.Trigger>{props.children}</ContextMenu.Trigger>
+				<ContextMenu.Portal>
+					<ContextMenu.Content className="radix-context-content">
+						<ContextMenu.Item
+							className="radix-context-item"
+							onSelect={() => setLabelDialogOpen(true)}
+						>
+							テキストを編集
+						</ContextMenu.Item>
 
-					<ContextMenu.Sub>
-						<ContextMenu.SubTrigger className="ContextMenuSubTrigger">
-							文字色
-							<div className="RightSlot">
-								<ChevronRight />
-							</div>
-						</ContextMenu.SubTrigger>
-						<ContextMenu.Portal>
-							<ContextMenu.SubContent className="ContextMenuSubContent">
-								<ContextMenu.RadioGroup value={color}>
-									{colorItems.map((v) => (
-										<ContextMenuRadioItem
-											className="ContextMenuItem"
-											value={v.value}
-											key={v.key}
-											onClick={(e) => {
-												e.preventDefault();
-												handleChangeColor(v.value);
-												setColor(v.value);
-											}}
-										>
-											{v.label}
-											<div className="RightSlot" style={{ color: v.value }}>
-												<Square />
-											</div>
-											<ContextMenu.ItemIndicator className="ContextMenuItemIndicator">
-												<Circle sx={{ fontSize: 8 }} />
-											</ContextMenu.ItemIndicator>
-										</ContextMenuRadioItem>
-									))}
-								</ContextMenu.RadioGroup>
-							</ContextMenu.SubContent>
-						</ContextMenu.Portal>
-					</ContextMenu.Sub>
+						<ContextMenu.Sub>
+							<ContextMenu.SubTrigger className="radix-context-subtrigger">
+								拍の長さ
+								<div className="radix-context-rightitem">
+									<ChevronRight />
+								</div>
+							</ContextMenu.SubTrigger>
+							<ContextMenu.Portal>
+								<ContextMenu.SubContent className="radix-context-subcontent">
+									<ContextMenu.RadioGroup
+										value={beat}
+										className="radix-context-radiogroup"
+									>
+										{beatItems.map((b) => (
+											<ContextMenuRadioItem
+												className="radix-context-radioitem"
+												value={b.value.toString()}
+												key={b.key}
+												onClick={(e) => {
+													e.preventDefault();
+													handleChangeBeat(b.value);
+													setBeat(b.value.toString());
+												}}
+											>
+												{b.label}
+												<ContextMenu.ItemIndicator className="radix-context-indicator">
+													<Circle sx={{ fontSize: 8 }} />
+												</ContextMenu.ItemIndicator>
+											</ContextMenuRadioItem>
+										))}
+									</ContextMenu.RadioGroup>
+								</ContextMenu.SubContent>
+							</ContextMenu.Portal>
+						</ContextMenu.Sub>
 
-					<ContextMenu.Sub>
-						<ContextMenu.SubTrigger className="ContextMenuSubTrigger">
-							拍数
-							<div className="RightSlot">
-								<ChevronRight />
-							</div>
-						</ContextMenu.SubTrigger>
-						<ContextMenu.Portal>
-							<ContextMenu.SubContent className="ContextMenuSubContent">
-								<ContextMenu.RadioGroup value={beat}>
-									{beatItems.map((b) => (
-										<ContextMenuRadioItem
-											className="ContextMenuItem"
-											value={b.value.toString()}
-											key={b.key}
-											onClick={(e) => {
-												e.preventDefault();
-												handleChangeBeat(b.value);
-												setBeat(b.value.toString());
-											}}
-										>
-											{b.label}
-											<ContextMenu.ItemIndicator className="ContextMenuItemIndicator">
-												<Circle sx={{ fontSize: 8 }} />
-											</ContextMenu.ItemIndicator>
-										</ContextMenuRadioItem>
-									))}
-								</ContextMenu.RadioGroup>
-							</ContextMenu.SubContent>
-						</ContextMenu.Portal>
-					</ContextMenu.Sub>
+						<ContextMenu.Sub>
+							<ContextMenu.SubTrigger className="radix-context-subtrigger">
+								背景色
+								<div className="radix-context-rightitem">
+									<ChevronRight />
+								</div>
+							</ContextMenu.SubTrigger>
+							<ContextMenu.Portal>
+								<ContextMenu.SubContent className="radix-context-subcontent">
+									<ContextMenu.RadioGroup
+										value={backgroundColor}
+										className="radix-context-radiogroup"
+									>
+										{colorItems.map((v) => (
+											<ContextMenuRadioItem
+												className="radix-context-radioitem"
+												value={v.value}
+												key={v.key}
+												onClick={(e) => {
+													e.preventDefault();
+													handleChangeBackgroundColor(v.value);
+													setBackgroundColor(v.value);
+												}}
+											>
+												{v.label}
+												<div
+													className="radix-context-rightitem"
+													style={{ color: v.value }}
+												>
+													<Square />
+												</div>
+												<ContextMenu.ItemIndicator className="radix-context-indicator">
+													<Circle sx={{ fontSize: 8 }} />
+												</ContextMenu.ItemIndicator>
+											</ContextMenuRadioItem>
+										))}
+									</ContextMenu.RadioGroup>
+								</ContextMenu.SubContent>
+							</ContextMenu.Portal>
+						</ContextMenu.Sub>
 
-					<ContextMenu.Separator className="ContextMenuSeparator" />
+						<ContextMenu.Sub>
+							<ContextMenu.SubTrigger className="radix-context-subtrigger">
+								文字色
+								<div className="radix-context-rightitem">
+									<ChevronRight />
+								</div>
+							</ContextMenu.SubTrigger>
+							<ContextMenu.Portal>
+								<ContextMenu.SubContent className="radix-context-subcontent">
+									<ContextMenu.RadioGroup
+										value={color}
+										className="radix-context-radiogroup"
+									>
+										{colorItems.map((v) => (
+											<ContextMenuRadioItem
+												className="radix-context-radioitem"
+												value={v.value}
+												key={v.key}
+												onClick={(e) => {
+													e.preventDefault();
+													handleChangeColor(v.value);
+													setColor(v.value);
+												}}
+											>
+												{v.label}
+												<div
+													className="radix-context-rightitem"
+													style={{ color: v.value }}
+												>
+													<Square />
+												</div>
+												<ContextMenu.ItemIndicator className="radix-context-indicator">
+													<Circle sx={{ fontSize: 8 }} />
+												</ContextMenu.ItemIndicator>
+											</ContextMenuRadioItem>
+										))}
+									</ContextMenu.RadioGroup>
+								</ContextMenu.SubContent>
+							</ContextMenu.Portal>
+						</ContextMenu.Sub>
 
-					<ContextMenu.Item className="ContextMenuItem" onClick={handleDupilicate}>
-						複製
-					</ContextMenu.Item>
+						<ContextMenu.Separator className="radix-context-separator" />
 
-					<ContextMenu.Separator className="ContextMenuSeparator" />
+						<ContextMenu.Item className="radix-context-item" onClick={handleDuplicate}>
+							複製
+						</ContextMenu.Item>
 
-					<ContextMenu.Item
-						className="ContextMenuItem"
-						onClick={() => removeNote(props.scoreId, props.noteId)}
-						style={{ color: "red" }}
-					>
-						削除
-					</ContextMenu.Item>
-				</ContextMenu.Content>
-			</ContextMenu.Portal>
-		</ContextMenu.Root>
+						<ContextMenu.Separator className="radix-context-separator" />
+
+						<ContextMenu.Item
+							className="radix-context-item"
+							onClick={() => removeNote(props.scoreId, props.noteId)}
+							style={{ color: "red" }}
+						>
+							削除
+						</ContextMenu.Item>
+					</ContextMenu.Content>
+				</ContextMenu.Portal>
+			</ContextMenu.Root>
+		</>
 	);
 };
 

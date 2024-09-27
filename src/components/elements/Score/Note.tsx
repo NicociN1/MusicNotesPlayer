@@ -4,6 +4,7 @@ import { Delete, Palette } from "@mui/icons-material";
 import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import { Dropdown, MenuProps } from "antd";
 import { useEffect, useRef, useState } from "react";
+import { isMobile } from "react-device-detect";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import { Resizable } from "react-resizable";
 import NoteContextMenu from "../ContextMenu/NoteContextMenu";
@@ -28,18 +29,20 @@ const NoteWrapper = styled.div`
   position: absolute;
 	top: 0;
 	left: 0;
-	transition: 0.2s width ease-in, 0.2s height ease-in;
+	transition: 0.05s transform ease, 0.15s width ease-in, 0.15s height ease-in;
+	width: 100%;
+	height: 100%;
 `;
 
 const NoteContainer = styled.div`
   display: grid;
-	width: calc(100% - 14px);
-	height: calc(100% - 10px);
+	width: calc(100% - 4px);
+	height: calc(100% - 6px);
   grid-template-rows: 100%;
   position: relative;
-	transition: 0.2s scale ease;
+	transition: 0.5s scale ease;
   &:hover, &:active {
-		scale: 1.01;
+		scale: 1.015;
   }
 `;
 const NoteBackground = styled.div`
@@ -54,6 +57,7 @@ const NoteBackground = styled.div`
 const Label = styled.div`
   background-color: transparent;
   height: 100%;
+	width: 100%;
   position: absolute;
   font-weight: bold;
   display: flex;
@@ -62,7 +66,8 @@ const Label = styled.div`
 `;
 
 const Note = (props: NoteProps) => {
-	const { removeNote, getNote, updateNote } = useScoresGlobal();
+	//TODO 4/4拍ずつ配置できるようにする
+	const { updateNote } = useScoresGlobal();
 	const [isDragging, setIsDragging] = useState(false);
 
 	const [position, setPosition] = useState<{ x: number; y: number }>({
@@ -74,8 +79,8 @@ const Note = (props: NoteProps) => {
 		setPosition({ x: data.x, y: data.y });
 		updateNote(props.scoreId, {
 			...props,
-			x: position.x / props.beatSize,
-			y: position.y / props.noteSize,
+			x: Math.floor(position.x / props.beatSize),
+			y: Math.ceil(position.y / props.noteSize),
 		});
 	};
 
@@ -87,6 +92,7 @@ const Note = (props: NoteProps) => {
 			onStart={() => setIsDragging(true)}
 			onStop={() => setIsDragging(false)}
 			handle=".background"
+			bounds=".staff-container"
 		>
 			<NoteWrapper
 				style={{
@@ -107,9 +113,8 @@ const Note = (props: NoteProps) => {
 					<Label
 						style={{
 							color: props.color,
-							width: `${props.noteSize * 1.2}px`,
 							fontSize: `${props.noteSize * 0.6}px`,
-							paddingLeft: `${props.noteSize * 0.3}px`,
+							paddingLeft: `${props.noteSize * 0.25}px`,
 						}}
 					>
 						{props.label}

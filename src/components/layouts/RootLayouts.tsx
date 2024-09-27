@@ -21,14 +21,15 @@ export const MusicControlBarLayout = styled.div`
   display: flex;
   justify-content: center;
   position: absolute;
-  bottom: 0;
+  bottom: 0px;
 `;
 
 export const ScoresLayout = styled.div`
   width: 100vw;
-  height: calc(100vh - 80px - 120px);
+  height: calc(100vh - 70px - 120px);
   position: absolute;
-  top: 80px;
+  top: 70px;
+  overflow: scroll;
 `;
 
 export const YouTubePlayerLayout = styled.div`

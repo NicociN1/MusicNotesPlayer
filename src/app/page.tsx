@@ -40,7 +40,7 @@ function App(): JSX.Element {
 							<MenuBarLayout>
 								<MenuBar /> {/* ControlBar */}
 							</MenuBarLayout>
-							<ScoresLayout id="scores-layout">
+							<ScoresLayout id="scores-layout" onContextMenu={(e) => e.preventDefault()}>
 								<MusicScore />
 							</ScoresLayout>
 							<MusicControlBarLayout>
@@ -55,3 +55,5 @@ function App(): JSX.Element {
 }
 
 export default App;
+
+// window.addEventListener("beforeunload", (e) => e.preventDefault());

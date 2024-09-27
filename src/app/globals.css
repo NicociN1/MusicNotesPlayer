@@ -30,8 +30,9 @@ body {
   overflow: hidden;
 }
 
-.ContextMenuContent,
-.ContextMenuSubContent {
+/* RadixUI ContextMenu */
+.radix-context-content,
+.radix-context-subcontent {
   min-width: 220px;
   background-color: white;
   border-radius: 6px;
@@ -41,10 +42,10 @@ body {
   user-select: none;
 }
 
-.ContextMenuItem,
-.ContextMenuCheckboxItem,
-.ContextMenuRadioItem,
-.ContextMenuSubTrigger {
+.radix-context-item,
+.radix-context-checkbox,
+.radix-context-radioitem,
+.radix-context-subtrigger {
   font-size: 16px;
   line-height: 1;
   color: black;
@@ -59,20 +60,20 @@ body {
   outline: none;
 }
 
-.ContextMenuItem[data-highlighted],
-.ContextMenuCheckboxItem[data-highlighted],
-.ContextMenuRadioItem[data-highlighted],
-.ContextMenuSubTrigger[data-highlighted] {
+.radix-context-item[data-highlighted],
+.radix-context-checkbox[data-highlighted],
+.radix-context-radioitem[data-highlighted],
+.radix-context-subtrigger[data-highlighted] {
   background-color: lightgray;
 }
 
-.ContextMenuSeparator {
+.radix-context-separator {
   height: 1px;
   background-color: black;
   margin: 5px;
 }
 
-.ContextMenuItemIndicator {
+.radix-context-indicator {
   position: absolute;
   left: 0;
   width: 25px;
@@ -81,8 +82,109 @@ body {
   justify-content: center;
 }
 
-.RightSlot {
+.radix-context-rightitem {
   margin-left: auto;
   padding-left: 20px;
   color: black;
+}
+
+/* RadixUI Dialog */
+/* モーダルのオーバーレイ */
+.radix-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* モーダルコンテンツのスタイル */
+.radix-dialog-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 10px 38px rgba(0, 0, 0, 0.35), 0px 10px 20px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 400px;
+}
+
+/* タイトルと説明のスタイル */
+.radix-dialog-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.radix-dialog-description {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* ボタンのスタイル */
+.radix-dialog-trigger-button,
+.radix-dialog-close-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.radix-dialog-close-button {
+  background-color: transparent;
+  color: black;
+  font-size: 20px;
+  line-height: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.radix-dialog-actiongroup {
+  margin-top: 20px;
+  width: 100%;
+  height: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.radix-dialog-action-right {
+  grid-column: 3;
+  grid-row: 1;
+  border-radius: 8px;
+  &:hover {
+    background-color: lightgray;
+  }
+}
+
+.radix-dialog-action-center {
+  grid-column: 2;
+  grid-row: 1;
+  border-radius: 8px;
+  &:hover {
+    background-color: lightgray;
+  }
+}
+
+.radix-dialog-action-left {
+  grid-column: 1;
+  grid-row: 1;
+  border-radius: 8px;
+  &:hover {
+    background-color: lightgray;
+  }
+}
+
+.radix-dialog-textfield {
+  margin-top: 20px;
+}
+
+.radix-dialog-inputgroup {
+  margin-top: 16px;
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(2, 1fr);
 }

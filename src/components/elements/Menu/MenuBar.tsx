@@ -1,8 +1,11 @@
 import { useScoresGlobal } from "@/hooks/ScoresGlobal";
+import { download, upload } from "@/utils/fileManager";
 import styled from "@emotion/styled";
-import { Add, MusicVideo } from "@mui/icons-material";
+import { Add, Download, MusicVideo, Save, Upload } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useState } from "react";
+import ScoreEditDialog from "../Dialog/ScoreEditDialog";
+import { ScoreProps } from "../Score/Score";
 import YouTubeIFrame from "./YTIFrame";
 
 const ControlBarWrapper = styled.div`
@@ -32,27 +35,50 @@ const YouTubeIframeContainer = styled.div`
 
 const MenuBar = () => {
 	const [isOpened, setOpen] = useState<boolean>(false);
-	const { addScore, createNewId } = useScoresGlobal();
+	const [scoreDialogOpen, setScoreDialogOpen] = useState(false);
+	const { scores, setScores } = useScoresGlobal();
 
 	return (
 		<ControlBarWrapper style={{ maxHeight: isOpened ? "400px" : "100%" }}>
+			<ScoreEditDialog
+				isEditor={false}
+				open={scoreDialogOpen}
+				onOpenChange={(open) => setScoreDialogOpen(open)}
+				scoreId={-1}
+			/>
 			<ButtonGrid>
 				<Tooltip title="Create Score">
 					<IconButton
 						sx={{ color: "white" }}
 						onClick={() => {
-							addScore({
-								beatCount: 4,
-								beatSize: 256,
-								lineCount: 6,
-								measureCount: 3,
-								notesSize: 40,
-								id: createNewId(),
-								notes: [],
-							});
+							setScoreDialogOpen(true);
 						}}
 					>
 						<Add fontSize="large" />
+					</IconButton>
+				</Tooltip>
+				<Tooltip title="Download [.json]">
+					<IconButton
+						sx={{ color: "white" }}
+						onClick={() => {
+							download(JSON.stringify(scores), "Score.note", "application/json");
+						}}
+					>
+						<Save fontSize="large" />
+					</IconButton>
+				</Tooltip>
+				<Tooltip title="Import [.json]">
+					<IconButton
+						sx={{ color: "white" }}
+						onClick={async () => {
+							upload()
+								.then((data) => {
+									setScores(JSON.parse(data) as ScoreProps[]);
+								})
+								.catch((e) => console.error(e));
+						}}
+					>
+						<Upload fontSize="large" />
 					</IconButton>
 				</Tooltip>
 				<Tooltip title="Music Video">

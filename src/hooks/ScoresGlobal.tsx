@@ -32,17 +32,7 @@ const GlobalContext = createContext(
 export const MusicScoresProvider = ({ children }: { children: React.ReactNode }) => {
 	const [scoreScroll, setScoreScroll] = useState(0);
 	const [measureCount, setMeasureCount] = useState(0);
-	const [scores, setScores] = useState<ScoreProps[]>([
-		{
-			beatCount: 4,
-			beatSize: 256,
-			lineCount: 6,
-			measureCount: 3,
-			notesSize: 40,
-			notes: [],
-			id: createNewId(),
-		},
-	]);
+	const [scores, setScores] = useState<ScoreProps[]>([]);
 
 	const addNote = (scoreId: number, noteProps: NoteProps) => {
 		let added = false;
@@ -62,7 +52,6 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 		setScores((scores) => {
 			const newScores = [...scores];
 			const scoreIndex = scores.findIndex((s) => s.id === scoreId);
-			console.log("debug", scoreId, scoreIndex, scores[scoreIndex]);
 			if (scoreIndex === -1) return scores;
 			const newNotes = [...scores[scoreIndex].notes];
 			const updatedNotes = newNotes.map((n) => (n.id === noteProps.id ? noteProps : n));
@@ -71,24 +60,19 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 		});
 	};
 	const getNote = (scoreId: number, id: number) => {
-		console.log(scoreId, id);
 		const score = scores.find((s) => s.id === scoreId);
-		console.log(scoreId, scores);
 		if (!score) return;
 		const noteProps = score.notes.find((n) => n.id === id);
-		console.log(noteProps);
 		return noteProps;
 	};
 	const removeNote = (scoreId: number, id: number) => {
 		setScores((scores) => {
 			const newScores = [...scores];
 			const scoreIndex = scores.findIndex((s) => s.id === scoreId);
-			console.log(scoreId, id, scoreIndex);
 			if (scoreIndex === -1) return scores;
 			const newNotes = newScores[scoreIndex].notes;
 			const updatedNotes = newNotes.filter((n) => n.id !== id);
 			newScores[scoreIndex].notes = updatedNotes;
-			console.log(newScores);
 			return newScores;
 		});
 	};

@@ -29,16 +29,13 @@ const ScoreContextMenu = (props: ContextMenuProps) => {
 		<ContextMenu.Root>
 			<ContextMenu.Trigger>{props.children}</ContextMenu.Trigger>
 			<ContextMenu.Portal>
-				<ContextMenu.Content className="ContextMenuContent">
-					<ContextMenu.Item className="ContextMenuItem" onClick={handleAddMeasure}>
-						小節を追加
-					</ContextMenu.Item>
-					<ContextMenu.Item className="ContextMenuItem" onClick={handleRemoveMeasure}>
-						小節を減らす
+				<ContextMenu.Content className="radix-context-content">
+					<ContextMenu.Item className="radix-context-item" onClick={handleAddMeasure}>
+						詳細設定
 					</ContextMenu.Item>
 					<ContextMenu.Separator className="ContextMenuSeparator" />
 					<ContextMenu.Item
-						className="ContextMenuItem"
+						className="radix-context-item"
 						onClick={() => removeScore(props.scoreId)}
 						style={{ color: "red" }}
 					>
