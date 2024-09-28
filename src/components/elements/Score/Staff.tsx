@@ -68,6 +68,7 @@ const Staff = (props: StaffProps) => {
 									color: "white",
 									label: "1",
 									noteSize: 32,
+									dotted: false,
 									scoreId: -1,
 									id: createId(),
 								};
