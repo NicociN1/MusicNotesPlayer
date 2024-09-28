@@ -110,7 +110,12 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 		const newId = createNewId();
 		console.log(noteProps.x);
 
-		const newNote = { ...noteProps, id: newId, x: noteProps.x + 1, y: noteProps.y };
+		const newNote = {
+			...noteProps,
+			id: newId,
+			x: noteProps.x + noteProps.beatSize,
+			y: noteProps.y,
+		};
 		console.log(newNote);
 		addNote(props.scoreId, newNote);
 	};
