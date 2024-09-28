@@ -59,15 +59,17 @@ const Staff = (props: StaffProps) => {
 							let added = false;
 							if (!added) {
 								added = true;
+								const scoreProps = getScore(props.scoreId);
+								if (!scoreProps) return;
 								const note: NoteProps = {
-									x: row,
-									y: column,
+									x: row * scoreProps.beatSize,
+									y: column * scoreProps.notesSize,
 									backgroundColor: "black",
-									beatCount: 4,
-									beatSize: 64,
+									beatCount: scoreProps.beatCount,
+									beatSize: scoreProps.beatSize,
 									color: "white",
-									label: "1",
-									noteSize: 32,
+									label: "0",
+									noteSize: scoreProps.notesSize,
 									dotted: false,
 									scoreId: -1,
 									id: createId(),

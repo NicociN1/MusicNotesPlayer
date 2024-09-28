@@ -51,8 +51,7 @@ const NoteBackground = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
-  border-radius: 999px;
-  box-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+	border-radius: 99px;
 	cursor: pointer;
 `;
 
@@ -69,20 +68,20 @@ const Label = styled.div`
 
 const Note = (props: NoteProps) => {
 	//TODO 4/4拍ずつ配置できるようにする
-	const { updateNote } = useScoresGlobal();
+	const { updateNote, getNote } = useScoresGlobal();
 	const [isDragging, setIsDragging] = useState(false);
 
 	const [position, setPosition] = useState<{ x: number; y: number }>({
-		x: props.x * props.beatSize,
-		y: props.y * props.noteSize,
+		x: props.x,
+		y: props.y,
 	});
 
 	const handleDrag = (_e: DraggableEvent, data: DraggableData) => {
 		setPosition({ x: data.x, y: data.y });
 		updateNote(props.scoreId, {
 			...props,
-			x: Math.floor(position.x / props.beatSize),
-			y: Math.ceil(position.y / props.noteSize),
+			x: data.x,
+			y: data.y,
 		});
 	};
 
@@ -108,14 +107,16 @@ const Note = (props: NoteProps) => {
 							className="background"
 							style={{
 								backgroundColor: props.backgroundColor,
-								boxShadow: isDragging ? "6px 6px 12px #00000088" : "",
+								boxShadow: isDragging
+									? "4px 4px 8px 2px #00000088"
+									: "2px 2px 8px #00000088",
 							}}
 						/>
 					</NoteContextMenu>
 					<Label
 						style={{
 							color: props.color,
-							fontSize: `${props.noteSize * 0.6}px`,
+							fontSize: `${props.noteSize * 0.7}px`,
 							paddingLeft: `${props.noteSize * 0.25}px`,
 						}}
 					>
