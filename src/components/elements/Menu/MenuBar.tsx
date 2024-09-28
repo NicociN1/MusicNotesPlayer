@@ -1,4 +1,5 @@
 import { SaveData as MusicSettings, useScoresGlobal } from "@/hooks/ScoresGlobal";
+import { useYouTubeGlobal } from "@/hooks/YouTubeGlobal";
 import { download, upload } from "@/utils/fileManager";
 import styled from "@emotion/styled";
 import {
@@ -24,13 +25,13 @@ const ControlBarWrapper = styled.div`
   transition: 0.3s max-height ease-out;
   position: relative;
   display: block;
-  padding-bottom: 24px;
+  padding-bottom: 16px;
 `;
 const ButtonGrid = styled.div`
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, 64px) 64px;
-  grid-template-rows: repeat(auto-fill, 70px);
+  grid-template-rows: repeat(auto-fill, 64px);
 `;
 const YouTubeIframeContainer = styled.div`
   width: 100vw;
@@ -39,7 +40,7 @@ const YouTubeIframeContainer = styled.div`
   justify-content: center;
   align-items: center;
   opacity: 1;
-  transition: 0.2s opacity;
+  transition: 0.15s opacity;
 `;
 
 const MenuBar = () => {
@@ -47,6 +48,7 @@ const MenuBar = () => {
 	const [scoreDialogOpen, setScoreDialogOpen] = useState(false);
 	const [musicDialogOpen, setMusicDialogOpen] = useState(false);
 	const { scores, setScores, musicSettings, setMusicSettings } = useScoresGlobal();
+	const { currentTime, setCurrentTime, duration, setDuration } = useYouTubeGlobal();
 
 	return (
 		<ControlBarWrapper style={{ maxHeight: isOpened ? "400px" : "100%" }}>

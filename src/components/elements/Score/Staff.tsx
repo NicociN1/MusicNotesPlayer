@@ -1,6 +1,7 @@
 import { useScoresGlobal } from "@/hooks/ScoresGlobal";
+import { useYouTubeGlobal } from "@/hooks/YouTubeGlobal";
 import styled from "@emotion/styled";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NoteProps } from "./Note";
 
 export interface StaffProps {
@@ -10,8 +11,17 @@ export interface StaffProps {
 	scoreId: number;
 }
 
+const DurationLine = styled.div`
+	height: 100%;
+	border-left: solid 2px red;
+	transition: 0.2s translate;
+	position: absolute;
+	top: 0;
+	left: 0;
+`;
+
 const Staff = (props: StaffProps) => {
-	const { createNewId: createId, addNote } = useScoresGlobal();
+	const { createNewId: createId, addNote, getScore } = useScoresGlobal();
 
 	const StaffWrapper = styled.div`
     display: grid;

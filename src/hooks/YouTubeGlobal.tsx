@@ -16,18 +16,20 @@ const Context = createContext(
 		setUrl: React.Dispatch<React.SetStateAction<string>>;
 		onProgress: MutableRefObject<((time: number) => void) | null>;
 		onPlayerStateChange: MutableRefObject<((state: number) => void) | null>;
+		currentTime: number;
+		setCurrentTime: React.Dispatch<React.SetStateAction<number>>;
+		duration: number;
+		setDuration: React.Dispatch<React.SetStateAction<number>>;
 	},
 );
 
-export const YouTubeGlobalProvider = ({
-	children,
-}: { children: React.ReactNode }) => {
+export const YouTubeGlobalProvider = ({ children }: { children: React.ReactNode }) => {
 	const iFrameRef = useRef<YouTubePlayer | null>(null);
-	const [url, setUrl] = useState<string>(
-		"https://www.youtube.com/watch?v=bqigIHMComE",
-	);
+	const [url, setUrl] = useState<string>("https://www.youtube.com/watch?v=bqigIHMComE");
 	const onProgress = useRef(null);
 	const onPlayerStateChange = useRef(null);
+	const [currentTime, setCurrentTime] = useState(0);
+	const [duration, setDuration] = useState(0);
 
 	return (
 		<Context.Provider
@@ -37,6 +39,10 @@ export const YouTubeGlobalProvider = ({
 				setUrl: setUrl,
 				onProgress: onProgress,
 				onPlayerStateChange: onPlayerStateChange,
+				currentTime: currentTime,
+				setCurrentTime: setCurrentTime,
+				duration: duration,
+				setDuration: setDuration,
 			}}
 		>
 			{children}

@@ -50,7 +50,7 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 	const [musicSettings, setMusicSettings] = useState<SaveData>({
 		bpm: 106,
 		youtubeUrl: "https://youtu.be/0xSiBpUdW4E",
-		startTime: 2,
+		startTime: 2.5,
 	});
 
 	const addNote = (scoreId: number, noteProps: NoteProps) => {

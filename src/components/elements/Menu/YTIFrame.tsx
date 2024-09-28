@@ -48,7 +48,6 @@ const YouTubeIFrame = () => {
 					onPlayerStateChange.current?.(3);
 				}}
 			/>
-			)
 		</YouTubePlayerWrapper>
 	);
 };

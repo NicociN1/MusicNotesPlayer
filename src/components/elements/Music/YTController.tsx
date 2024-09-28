@@ -14,12 +14,15 @@ import {
 	PlayArrowRounded,
 	SkipPrevious,
 	SkipPreviousRounded,
+	SlowMotionVideo,
+	SlowMotionVideoRounded,
 	VolumeOff,
 	VolumeOffRounded,
 	VolumeUp,
 	VolumeUpRounded,
 } from "@mui/icons-material";
 import { IconButton, Slider, Tooltip } from "@mui/material";
+import { Dropdown, MenuProps } from "antd";
 import { useRef, useState } from "react";
 import { isMobile } from "react-device-detect";
 
@@ -33,10 +36,10 @@ const YTControllerWrapper = styled.div`
 `;
 
 const RowContentsContainer = styled.div`
-	width: 100%;
 	height: 100%;
   display: flex;
-  justify-content: center;
+	justify-content: center;
+	align-items: center;
 `;
 
 const AnimateSlider = styled(Slider)`
@@ -68,6 +71,10 @@ const AnimateSlider = styled(Slider)`
   }
 `;
 
+const ButtonItem = styled.div`
+	cursor: pointer;
+`;
+
 const YouTubeController = () => {
 	const { volume, setVolume } = useYouTubeVolume();
 	const [isMuted, setMute] = useState<boolean>(false);
@@ -78,6 +85,57 @@ const YouTubeController = () => {
 	const beforePlaying = useRef<boolean | null>(null);
 	const { getMainScore, musicSettings: saveData } = useScoresGlobal();
 	const lastMeasureCount = useRef(0);
+
+	const items: MenuProps["items"] = [
+		{
+			key: "1",
+			label: (
+				<ButtonItem
+					onClick={() => {
+						iFrameRef.current?.getInternalPlayer().setPlaybackRate(1.0);
+					}}
+				>
+					1.0倍速
+				</ButtonItem>
+			),
+		},
+		{
+			key: "2",
+			label: (
+				<ButtonItem
+					onClick={() => {
+						iFrameRef.current?.getInternalPlayer().setPlaybackRate(0.9);
+					}}
+				>
+					0.9倍速
+				</ButtonItem>
+			),
+		},
+		{
+			key: "3",
+			label: (
+				<ButtonItem
+					onClick={() => {
+						iFrameRef.current?.getInternalPlayer().setPlaybackRate(0.75);
+					}}
+				>
+					0.75倍速
+				</ButtonItem>
+			),
+		},
+		{
+			key: "4",
+			label: (
+				<ButtonItem
+					onClick={() => {
+						iFrameRef.current?.getInternalPlayer().setPlaybackRate(0.5);
+					}}
+				>
+					0.5倍速
+				</ButtonItem>
+			),
+		},
+	];
 
 	const seekTo = (time: number, seekEnd = true) => {
 		const iFrame = iFrameRef.current;
@@ -174,43 +232,41 @@ const YouTubeController = () => {
 	return (
 		<YTControllerWrapper>
 			<RowContentsContainer>
-				<Tooltip placement="top" title="Restart">
-					<IconButton aria-label="Restart">
-						<SkipPreviousRounded
-							sx={{ fontSize: "32px", color: "white" }}
-							onClick={() => clickPrev()}
-						/>
-					</IconButton>
-				</Tooltip>
+				<Dropdown
+					trigger={["click"]}
+					menu={{ items, selectable: true, defaultSelectedKeys: ["1"] }}
+				>
+					<Tooltip placement="top" title="Speed">
+						<IconButton>
+							<SlowMotionVideoRounded sx={{ fontSize: "32px", color: "white" }} />
+						</IconButton>
+					</Tooltip>
+				</Dropdown>
 				<Tooltip placement="top" title="Skip Rewind">
-					<IconButton aria-label="Skip Rewind">
-						<FastRewindRounded
-							sx={{ fontSize: "32px", color: "white" }}
-							onClick={() => clickRewind()}
-						/>
+					<IconButton aria-label="Skip Rewind" onClick={() => clickRewind()}>
+						<FastRewindRounded sx={{ fontSize: "32px", color: "white" }} />
 					</IconButton>
 				</Tooltip>
 				<Tooltip placement="top" title={isPlaying ? "Pause" : "Play"}>
-					<IconButton aria-label={isPlaying ? "Pause" : "Play"}>
-						{isPlaying ? (
+					{isPlaying ? (
+						<IconButton aria-label="Pause">
 							<PauseRounded
-								sx={{ fontSize: "48px", color: "white" }}
+								sx={{ fontSize: "52px", color: "white" }}
 								onClick={() => clickPause()}
 							/>
-						) : (
+						</IconButton>
+					) : (
+						<IconButton aria-label="Play">
 							<PlayArrowRounded
-								sx={{ fontSize: "48px", color: "white" }}
+								sx={{ fontSize: "52px", color: "white" }}
 								onClick={() => clickPlay()}
 							/>
-						)}
-					</IconButton>
+						</IconButton>
+					)}
 				</Tooltip>
 				<Tooltip placement="top" title="Skip Forward">
-					<IconButton aria-label="Skip Forward">
-						<FastForward
-							sx={{ fontSize: "32px", color: "white" }}
-							onClick={() => clickForward()}
-						/>
+					<IconButton aria-label="Skip Forward" onClick={() => clickForward()}>
+						<FastForward sx={{ fontSize: "32px", color: "white" }} />
 					</IconButton>
 				</Tooltip>
 				<Tooltip placement="top" title="Change Volume">
@@ -246,7 +302,7 @@ const YouTubeController = () => {
 					style={{ width: isVisibleVolume ? "80px" : "0" }}
 					onChange={(_ev, value) => sliderVolume(value as number)}
 				/>
-			</RowContentsContainer>
+			</RowContentsContainer>{" "}
 			<Tooltip
 				title={`${timeFormat(Math.floor(sliderTime))} / -${timeFormat(Math.floor((iFrameRef.current?.getDuration() ?? 0) - sliderTime))}`}
 				placement="top"
