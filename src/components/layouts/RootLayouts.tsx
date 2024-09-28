@@ -17,7 +17,7 @@ export const MenuBarLayout = styled.div`
 
 export const MusicControlBarLayout = styled.div`
   width: 100vw;
-  height: 120px;
+  height: 100px;
   display: flex;
   justify-content: center;
   position: absolute;
@@ -26,7 +26,7 @@ export const MusicControlBarLayout = styled.div`
 
 export const ScoresLayout = styled.div`
   width: 100vw;
-  height: calc(100vh - 70px - 120px);
+  height: calc(100vh - 70px - 100px);
   position: absolute;
   top: 70px;
   overflow: scroll;

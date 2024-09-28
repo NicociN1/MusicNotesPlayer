@@ -10,18 +10,22 @@ import {
 	ScoresLayout,
 } from "@/components/layouts/RootLayouts";
 import { MusicScoresProvider, useScoresGlobal } from "@/hooks/ScoresGlobal";
+import { ScrollProvider } from "@/hooks/ScrollGlobal";
 import { UIVisibilityProvider } from "@/hooks/UIVisibilityGlobal";
 import { YouTubeGlobalProvider } from "@/hooks/YouTubeGlobal";
 import { YouTubeVolumeProvider } from "@/hooks/YouTubeVolumeProvider";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { useEffect } from "react";
 
 const ContentProvider = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<MusicScoresProvider>
-			<YouTubeGlobalProvider>
-				<YouTubeVolumeProvider>{children}</YouTubeVolumeProvider>
-			</YouTubeGlobalProvider>
-		</MusicScoresProvider>
+		<ScrollProvider>
+			<MusicScoresProvider>
+				<YouTubeGlobalProvider>
+					<YouTubeVolumeProvider>{children}</YouTubeVolumeProvider>
+				</YouTubeGlobalProvider>
+			</MusicScoresProvider>
+		</ScrollProvider>
 	);
 };
 const theme = createTheme({

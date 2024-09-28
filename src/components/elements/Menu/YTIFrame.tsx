@@ -1,3 +1,4 @@
+import { useScoresGlobal } from "@/hooks/ScoresGlobal";
 import { useUIVisibility } from "@/hooks/UIVisibilityGlobal";
 import { useYouTubeGlobal } from "@/hooks/YouTubeGlobal";
 import styled from "@emotion/styled";
@@ -14,40 +15,40 @@ const YouTubePlayerWrapper = styled.div`
 `;
 
 const YouTubeIFrame = () => {
-	const { url, iFrameRef, onProgress, onPlayerStateChange } = useYouTubeGlobal();
+	const { iFrameRef, onProgress, onPlayerStateChange } = useYouTubeGlobal();
+	const { musicSettings: saveData } = useScoresGlobal();
 	const { visibleIFrame } = useUIVisibility();
 
 	return (
 		<YouTubePlayerWrapper style={visibleIFrame ? {} : { width: 0, height: 0 }}>
-			{url ? (
-				<YouTubePlayer
-					url={url}
-					width="100%"
-					height="100%"
-					ref={(player) => {
-						iFrameRef.current = player;
-					}}
-					config={{
-						playerVars: {
-							controls: 0,
-							disablekb: 1,
-						},
-					}}
-					progressInterval={200}
-					onProgress={(state) => {
-						onProgress.current?.(state.playedSeconds);
-					}}
-					onPlay={() => {
-						onPlayerStateChange.current?.(1);
-					}}
-					onPause={() => {
-						onPlayerStateChange.current?.(2);
-					}}
-					onEnded={() => {
-						onPlayerStateChange.current?.(3);
-					}}
-				/>
-			) : null}
+			<YouTubePlayer
+				url={saveData.youtubeUrl}
+				width="100%"
+				height="100%"
+				ref={(player) => {
+					iFrameRef.current = player;
+				}}
+				config={{
+					playerVars: {
+						controls: 0,
+						disablekb: 1,
+					},
+				}}
+				progressInterval={100}
+				onProgress={(state) => {
+					onProgress.current?.(state.playedSeconds);
+				}}
+				onPlay={() => {
+					onPlayerStateChange.current?.(1);
+				}}
+				onPause={() => {
+					onPlayerStateChange.current?.(2);
+				}}
+				onEnded={() => {
+					onPlayerStateChange.current?.(3);
+				}}
+			/>
+			)
 		</YouTubePlayerWrapper>
 	);
 };

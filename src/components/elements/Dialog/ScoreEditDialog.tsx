@@ -1,6 +1,6 @@
 import { useScoresGlobal } from "@/hooks/ScoresGlobal";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Input, InputNumber } from "antd";
+import { Checkbox, Input, InputNumber } from "antd";
 import { useRef } from "react";
 import { ScoreProps } from "../Score/Score";
 
@@ -9,6 +9,7 @@ const DLINECOUNT = 6;
 const DBEATCOUNT = 4;
 const DMEASURESIZE = 512;
 const DNOTESSIZE = 32;
+const DMAINSCORE = false;
 
 interface ScoreEditDialogProps {
 	open: boolean;
@@ -18,16 +19,49 @@ interface ScoreEditDialogProps {
 }
 
 const ScoreEditDialog = (props: ScoreEditDialogProps) => {
-	const { getScore, updateScore, addScore, createNewId, removeScore } = useScoresGlobal();
-	const scoreProps = getScore(props.scoreId);
-	const measureCountValueRef = useRef<number | null>(null);
-	const lineCountValueRef = useRef<number | null>(null);
-	const beatCountValueRef = useRef<number | null>(null);
-	const measureSizeValueRef = useRef<number | null>(null);
-	const notesSizeValueRef = useRef<number | null>(null);
+	const { getScore, updateScore, addScore, createNewId, removeScore, updateMainScore } =
+		useScoresGlobal();
+	const scoreProps = props.isEditor ? getScore(props.scoreId) : undefined;
+	const measureCountValueRef = useRef<number>(
+		props.isEditor ? (scoreProps?.measureCount ?? DMEASURECOUNT) : DMEASURECOUNT,
+	);
+	const lineCountValueRef = useRef<number>(
+		props.isEditor ? (scoreProps?.lineCount ?? DLINECOUNT) : DLINECOUNT,
+	);
+	const beatCountValueRef = useRef<number>(
+		props.isEditor ? (scoreProps?.beatCount ?? DBEATCOUNT) : DBEATCOUNT,
+	);
+	const measureSizeValueRef = useRef<number>(
+		props.isEditor
+			? scoreProps
+				? scoreProps.beatSize * scoreProps.beatCount
+				: DMEASURESIZE
+			: DMEASURESIZE,
+	);
+	const notesSizeValueRef = useRef<number>(
+		props.isEditor ? (scoreProps?.notesSize ?? DNOTESSIZE) : DNOTESSIZE,
+	);
+	const mainScoreValueRef = useRef<boolean>(
+		props.isEditor ? (scoreProps?.mainScore ?? DMAINSCORE) : DMAINSCORE,
+	);
+
+	const close = () => {
+		props.onOpenChange(false);
+		// measureCountValueRef.current = null;
+		// lineCountValueRef.current = null;
+		// beatCountValueRef.current = null;
+		// measureSizeValueRef.current = null;
+		// notesSizeValueRef.current = null;
+		// mainScoreValueRef.current = null;
+	};
 
 	return (
-		<Dialog.Root open={props.open} onOpenChange={props.onOpenChange}>
+		<Dialog.Root
+			open={props.open}
+			onOpenChange={(open) => {
+				props.onOpenChange(open);
+			}}
+		>
 			<Dialog.Portal>
 				<Dialog.Overlay className="radix-dialog-overlay" />
 
@@ -39,6 +73,7 @@ const ScoreEditDialog = (props: ScoreEditDialogProps) => {
 						<InputNumber
 							defaultValue={scoreProps?.measureCount ?? DMEASURECOUNT}
 							onChange={(v) => {
+								if (!v) return;
 								measureCountValueRef.current = v;
 							}}
 							style={{ width: "100%" }}
@@ -47,35 +82,49 @@ const ScoreEditDialog = (props: ScoreEditDialogProps) => {
 						<InputNumber
 							defaultValue={scoreProps?.lineCount ?? DLINECOUNT}
 							onChange={(v) => {
+								if (!v) return;
 								lineCountValueRef.current = v;
 							}}
 							style={{ width: "100%" }}
 						/>
-						1小節の拍数
+						小節の拍数
 						<InputNumber
 							defaultValue={scoreProps?.beatCount ?? DBEATCOUNT}
 							onChange={(v) => {
+								if (!v) return;
 								beatCountValueRef.current = v;
 							}}
 							style={{ width: "100%" }}
 						/>
-						1小節のサイズ
+						小節のサイズ
 						<InputNumber
+							addonAfter="px"
 							defaultValue={
 								scoreProps ? scoreProps.beatSize * scoreProps.beatCount : DMEASURESIZE
 							}
 							onChange={(v) => {
+								if (!v) return;
 								measureSizeValueRef.current = v;
 							}}
 							style={{ width: "100%" }}
 						/>
-						音符のサイズ
+						ノーツのサイズ
 						<InputNumber
+							addonAfter="px"
+							disabled={props.isEditor}
 							defaultValue={scoreProps?.notesSize ?? DNOTESSIZE}
 							onChange={(v) => {
+								if (!v) return;
 								notesSizeValueRef.current = v;
 							}}
 							style={{ width: "100%" }}
+						/>
+						メインスコアに設定
+						<Checkbox
+							defaultChecked={scoreProps?.mainScore}
+							onChange={(v) => {
+								mainScoreValueRef.current = v.target.checked;
+							}}
 						/>
 					</div>
 
@@ -85,30 +134,31 @@ const ScoreEditDialog = (props: ScoreEditDialogProps) => {
 							className="radix-dialog-action-right"
 							onClick={() => {
 								const newScoreProps = {} as ScoreProps;
-								newScoreProps.beatCount = beatCountValueRef.current ?? DBEATCOUNT;
+								newScoreProps.beatCount = beatCountValueRef.current;
 								newScoreProps.beatSize =
-									(measureSizeValueRef.current ?? DMEASURESIZE) /
-									(beatCountValueRef.current ?? DBEATCOUNT);
-								newScoreProps.lineCount = lineCountValueRef.current ?? DLINECOUNT;
-								newScoreProps.measureCount =
-									measureCountValueRef.current ?? DMEASURECOUNT;
-								newScoreProps.notesSize = notesSizeValueRef.current ?? DNOTESSIZE;
+									measureSizeValueRef.current / beatCountValueRef.current;
+								newScoreProps.lineCount = lineCountValueRef.current;
+								newScoreProps.measureCount = measureCountValueRef.current;
+								newScoreProps.notesSize = notesSizeValueRef.current;
 
 								if (props.isEditor) {
 									if (!scoreProps) return;
 									updateScore({ ...scoreProps, ...newScoreProps });
+									updateMainScore(mainScoreValueRef.current ? props.scoreId : null);
 								} else {
+									const newId = createNewId();
 									addScore({
 										...newScoreProps,
 										notes: [],
 										x: 0,
 										y: 0,
 										stringLabels: [],
-										id: createNewId(),
+										id: newId,
 									});
+									updateMainScore(mainScoreValueRef.current ? newId : null);
 								}
 
-								props.onOpenChange(false);
+								close();
 							}}
 						>
 							{props.isEditor ? "保存" : "作成"}
@@ -120,7 +170,7 @@ const ScoreEditDialog = (props: ScoreEditDialogProps) => {
 								style={{ color: "red" }}
 								onClick={() => {
 									removeScore(props.scoreId);
-									props.onOpenChange(false);
+									close();
 								}}
 							>
 								削除
@@ -129,14 +179,18 @@ const ScoreEditDialog = (props: ScoreEditDialogProps) => {
 						<button
 							type="button"
 							className="radix-dialog-action-left"
-							onClick={() => props.onOpenChange(false)}
+							onClick={() => close()}
 						>
 							キャンセル
 						</button>
 					</div>
 
 					<Dialog.Close asChild>
-						<button type="button" className="radix-dialog-close-button">
+						<button
+							onClick={() => close()}
+							type="button"
+							className="radix-dialog-close-button"
+						>
 							×
 						</button>
 					</Dialog.Close>

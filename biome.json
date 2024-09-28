@@ -10,7 +10,8 @@
         "useImportType": "off",
         "useSelfClosingElements": "warn",
         "noUnusedTemplateLiteral": "warn",
-        "useConst": "warn"
+        "useConst": "warn",
+        "noInferrableTypes": "warn"
       },
       "suspicious": {
         "noEmptyInterface": "off",

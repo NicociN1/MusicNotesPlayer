@@ -2,7 +2,14 @@
 import { NoteProps } from "@/components/elements/Score/Note";
 import { ScoreProps } from "@/components/elements/Score/Score";
 import PropTypes from "prop-types";
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+	createContext,
+	RefObject,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 
 const createNewId = (() => {
 	let currentId = 0;
@@ -11,8 +18,6 @@ const createNewId = (() => {
 
 const GlobalContext = createContext(
 	{} as {
-		scoreScroll: number;
-		setScoreScroll: React.Dispatch<React.SetStateAction<number>>;
 		measureCount: number;
 		setMeasureCount: React.Dispatch<React.SetStateAction<number>>;
 		createNewId: () => number;
@@ -26,13 +31,27 @@ const GlobalContext = createContext(
 		getScore: (id: number) => ScoreProps | undefined;
 		removeScore: (id: number) => void;
 		updateScore: (scoreProps: ScoreProps) => void;
+		updateMainScore: (scoreId: number | null) => void;
+		getMainScore: () => ScoreProps | null;
+		setMusicSettings: (saveData: SaveData) => void;
+		musicSettings: SaveData;
 	},
 );
 
+export interface SaveData {
+	bpm: number;
+	youtubeUrl: string;
+	startTime: number;
+}
+
 export const MusicScoresProvider = ({ children }: { children: React.ReactNode }) => {
-	const [scoreScroll, setScoreScroll] = useState(0);
 	const [measureCount, setMeasureCount] = useState(0);
 	const [scores, setScores] = useState<ScoreProps[]>([]);
+	const [musicSettings, setMusicSettings] = useState<SaveData>({
+		bpm: 106,
+		youtubeUrl: "https://youtu.be/0xSiBpUdW4E",
+		startTime: 2,
+	});
 
 	const addNote = (scoreId: number, noteProps: NoteProps) => {
 		let added = false;
@@ -84,7 +103,7 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 			}
 			const newScores = [...scores];
 			newScores.push(scoreProps);
-			return [...newScores];
+			return newScores;
 		});
 	};
 	const updateScore = (scoreProps: ScoreProps) => {
@@ -110,12 +129,22 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 			return [...filteredScores];
 		});
 	};
+	const updateMainScore = (id: number | null) => {
+		setScores((scores) => {
+			const newScores = scores.map((s) => ({
+				...s,
+				mainScore: id != null ? s.id === id : false,
+			}));
+			return newScores;
+		});
+	};
+	const getMainScore = () => {
+		return scores.find((s) => s.mainScore) ?? null;
+	};
 
 	return (
 		<GlobalContext.Provider
 			value={{
-				scoreScroll: scoreScroll,
-				setScoreScroll: setScoreScroll,
 				measureCount: measureCount,
 				setMeasureCount: setMeasureCount,
 				createNewId: createNewId,
@@ -129,6 +158,10 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 				updateScore: updateScore,
 				getScore: getScore,
 				removeScore: removeScore,
+				updateMainScore: updateMainScore,
+				getMainScore: getMainScore,
+				setMusicSettings: setMusicSettings,
+				musicSettings: musicSettings,
 			}}
 		>
 			{children}

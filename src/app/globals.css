@@ -158,6 +158,10 @@ body {
   &:hover {
     background-color: lightgray;
   }
+  &:active {
+    background-color: black;
+    color: white;
+  }
 }
 
 .radix-dialog-action-center {
@@ -167,6 +171,10 @@ body {
   &:hover {
     background-color: lightgray;
   }
+  &:active {
+    background-color: black;
+    color: white;
+  }
 }
 
 .radix-dialog-action-left {
@@ -175,6 +183,10 @@ body {
   border-radius: 8px;
   &:hover {
     background-color: lightgray;
+  }
+  &:active {
+    background-color: black;
+    color: white;
   }
 }
 

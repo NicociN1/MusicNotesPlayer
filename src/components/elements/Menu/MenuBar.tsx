@@ -1,9 +1,18 @@
-import { useScoresGlobal } from "@/hooks/ScoresGlobal";
+import { SaveData as MusicSettings, useScoresGlobal } from "@/hooks/ScoresGlobal";
 import { download, upload } from "@/utils/fileManager";
 import styled from "@emotion/styled";
-import { Add, Download, MusicVideo, Save, Upload } from "@mui/icons-material";
+import {
+	Add,
+	Download,
+	MusicVideo,
+	Save,
+	SettingsApplications,
+	Tune,
+	Upload,
+} from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useState } from "react";
+import MusicSettingsDialog from "../Dialog/MusicSettingsDialog";
 import ScoreEditDialog from "../Dialog/ScoreEditDialog";
 import { ScoreProps } from "../Score/Score";
 import YouTubeIFrame from "./YTIFrame";
@@ -36,15 +45,24 @@ const YouTubeIframeContainer = styled.div`
 const MenuBar = () => {
 	const [isOpened, setOpen] = useState<boolean>(false);
 	const [scoreDialogOpen, setScoreDialogOpen] = useState(false);
-	const { scores, setScores } = useScoresGlobal();
+	const [musicDialogOpen, setMusicDialogOpen] = useState(false);
+	const { scores, setScores, musicSettings, setMusicSettings } = useScoresGlobal();
 
 	return (
 		<ControlBarWrapper style={{ maxHeight: isOpened ? "400px" : "100%" }}>
 			<ScoreEditDialog
 				isEditor={false}
 				open={scoreDialogOpen}
-				onOpenChange={(open) => setScoreDialogOpen(open)}
+				onOpenChange={(open) => {
+					setScoreDialogOpen(open);
+				}}
 				scoreId={-1}
+			/>
+			<MusicSettingsDialog
+				open={musicDialogOpen}
+				onOpenChange={(open) => {
+					setMusicDialogOpen(open);
+				}}
 			/>
 			<ButtonGrid>
 				<Tooltip title="Create Score">
@@ -57,28 +75,47 @@ const MenuBar = () => {
 						<Add fontSize="large" />
 					</IconButton>
 				</Tooltip>
-				<Tooltip title="Download [.json]">
+				<Tooltip title="Export .json">
 					<IconButton
 						sx={{ color: "white" }}
 						onClick={() => {
-							download(JSON.stringify(scores), "Score.note", "application/json");
+							download(
+								JSON.stringify({ scores: scores, settings: musicSettings }),
+								"Score File.json",
+								"application/json",
+							);
 						}}
 					>
 						<Save fontSize="large" />
 					</IconButton>
 				</Tooltip>
-				<Tooltip title="Import [.json]">
+				<Tooltip title="Import .json">
 					<IconButton
 						sx={{ color: "white" }}
 						onClick={async () => {
 							upload()
 								.then((data) => {
-									setScores(JSON.parse(data) as ScoreProps[]);
+									const importData = JSON.parse(data) as {
+										scores: ScoreProps[];
+										settings: MusicSettings;
+									};
+									if (!importData.scores || !importData.settings) return;
+									setScores(importData.scores);
+									setMusicSettings(importData.settings);
 								})
 								.catch((e) => console.error(e));
 						}}
 					>
 						<Upload fontSize="large" />
+					</IconButton>
+				</Tooltip>
+				<Tooltip title="Music Settings">
+					<IconButton
+						onClick={() => {
+							setMusicDialogOpen(true);
+						}}
+					>
+						<Tune fontSize="large" />
 					</IconButton>
 				</Tooltip>
 				<Tooltip title="Music Video">

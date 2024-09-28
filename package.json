@@ -9,7 +9,7 @@
     "lint": "biome lint --apply .",
     "format": "biome format .",
     "check": "biome check --apply .",
-    "deploy": "git add . && cz && echo \"Please run \"git push -u origin main\"\""
+    "deploy": "git add . && cz && echo Please run [git push -u origin main]"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",

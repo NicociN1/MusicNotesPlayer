@@ -75,6 +75,7 @@ export interface ScoreProps {
 	x: number;
 	y: number;
 	stringLabels: { stringIndex: number; label: string }[];
+	mainScore: boolean;
 	id: number;
 }
 
@@ -96,13 +97,12 @@ const Score = (props: ScoreProps) => {
 			handle=".drag-handle"
 			onStart={() => setDragging(true)}
 			onStop={handleDragStop}
-			grid={[1, 1]}
 			bounds={{ left: 0, top: 0 }}
 			position={{ x: props.x, y: props.y }}
 		>
 			<DraggableWrapper
 				style={{
-					boxShadow: `0 0 ${isDragging ? 36 : 16}px -2px #00000088`,
+					boxShadow: `0 0 ${isDragging ? 30 : 10}px -2px #00000088`,
 					backgroundColor: isDragging ? "#ffffff88" : "white",
 					zIndex: isDragging ? 1 : 0,
 				}}
