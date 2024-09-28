@@ -15,8 +15,13 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 	const youtubeUrlValueRef = useRef<string>(saveData.youtubeUrl);
 	const startTimeValueRef = useRef<number>(saveData.startTime);
 
-	const close = () => {
+	const handleClose = () => {
 		props.onOpenChange(false);
+		setTimeout(() => {
+			bpmValueRef.current = saveData.bpm;
+			youtubeUrlValueRef.current = saveData.youtubeUrl;
+			startTimeValueRef.current = saveData.startTime;
+		}, 100);
 	};
 
 	return (
@@ -73,7 +78,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 								newSaveData.startTime = startTimeValueRef.current;
 
 								setSaveData(newSaveData);
-								close();
+								handleClose();
 							}}
 						>
 							保存
@@ -81,7 +86,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 						<button
 							type="button"
 							className="radix-dialog-action-left"
-							onClick={() => close()}
+							onClick={() => handleClose()}
 						>
 							キャンセル
 						</button>
@@ -89,7 +94,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 
 					<Dialog.Close asChild>
 						<button
-							onClick={() => close()}
+							onClick={() => handleClose()}
 							type="button"
 							className="radix-dialog-close-button"
 						>

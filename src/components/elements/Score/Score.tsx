@@ -22,7 +22,7 @@ const DraggableWrapper = styled.div`
 	position: absolute;
 	display: grid;
 	grid-template-columns: 32px 1fr 32px;
-	grid-template-rows: repeat(2, 32px) 1fr 32px;
+	grid-template-rows: 20px 32px 1fr 32px;
 `;
 const ScoreContainer = styled.div`
 	display: grid;
@@ -37,11 +37,14 @@ const LabelWrapper = styled.div`
 const DragHandleBar = styled.div`
 	border-bottom: solid 1px lightgray;
 	background-color: #ccccc344;
-	cursor: pointer;
 	width: 100%;
 	height: 100%;
 	grid-row: 1;
 	grid-column: 1 / 4;
+	cursor: grab;
+	&:active {
+		cursor: grabbing;
+	}
 `;
 const StyledInput = styled.input`
 	width: 100%;
