@@ -38,8 +38,8 @@ const NoteWrapper = styled.div`
 
 const NoteContainer = styled.div`
   display: grid;
-	width: calc(98%);
-	height: calc(95%);
+	width: calc(100% - 6px);
+	height: calc(100% - 5px);
   grid-template-rows: 100%;
   position: relative;
 	transition: 0.5s scale ease;
