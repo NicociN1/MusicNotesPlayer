@@ -51,8 +51,8 @@ const NoteBackground = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
-  //border-radius: 3px; /* 角を丸める */
-  box-shadow: 0 0 5px rgba(255, 255, 0, 0.5); /* 蛍光感を出すシャドウ */
+  border-radius: 999px;
+  box-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
 	cursor: pointer;
 `;
 
