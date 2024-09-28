@@ -109,7 +109,8 @@ const Note = (props: NoteProps) => {
 								backgroundColor: props.backgroundColor,
 								boxShadow: isDragging
 									? "4px 4px 8px 2px #00000088"
-									: "2px 2px 8px #00000088",
+									: // : "2px 2px 8px #00000088",
+										"",
 							}}
 						/>
 					</NoteContextMenu>
