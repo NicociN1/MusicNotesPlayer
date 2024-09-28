@@ -46,9 +46,9 @@ const NoteContainer = styled.div`
   &:hover, &:active {
 		scale: 1.015;
   }
-	&:focus {
+	/* &:focus {
 		scale: 1.04;
-	}
+	} */
 `;
 const NoteBackground = styled.div`
   width: 100%;
