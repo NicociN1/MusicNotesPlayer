@@ -18,7 +18,9 @@ export interface NoteProps {
 	x: number;
 	y: number;
 	label: string;
+	dotted: boolean;
 	scoreId: number;
+	// dotted: boolean;
 	id: number;
 }
 
@@ -96,7 +98,7 @@ const Note = (props: NoteProps) => {
 		>
 			<NoteWrapper
 				style={{
-					width: props.beatSize * props.beatCount + 2,
+					width: props.beatSize * props.beatCount * (props.dotted ? 1.5 : 1) + 2,
 					height: props.noteSize,
 				}}
 			>

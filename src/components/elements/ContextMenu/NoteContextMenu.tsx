@@ -1,7 +1,7 @@
 import { useScoresGlobal } from "@/hooks/ScoresGlobal";
 import styles from "@/styles/ContextMenu.module.css";
 import styled from "@emotion/styled";
-import { ChevronRight, Circle, Square } from "@mui/icons-material";
+import { Check, ChevronRight, Circle, Square } from "@mui/icons-material";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import { ContextMenuRadioItem } from "@radix-ui/react-context-menu";
 import { useState } from "react";
@@ -123,6 +123,7 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 	const [color, setColor] = useState("white");
 	const [backgroundColor, setBackgroundColor] = useState("black");
 	const [beat, setBeat] = useState("1");
+	const [dotted, setDotted] = useState(false);
 	const [labelDialogOpen, setLabelDialogOpen] = useState(false);
 
 	return (
@@ -180,6 +181,23 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 								</ContextMenu.SubContent>
 							</ContextMenu.Portal>
 						</ContextMenu.Sub>
+
+						<ContextMenu.CheckboxItem
+							checked={dotted}
+							onClick={(e) => {
+								const newNote = getNote(props.scoreId, props.noteId);
+								if (!newNote) return;
+								updateNote(props.scoreId, { ...newNote, dotted: !dotted });
+								setDotted(!dotted);
+								e.preventDefault();
+							}}
+							className="radix-context-checkbox"
+						>
+							<ContextMenu.ItemIndicator className="radix-context-indicator">
+								<Check fontSize="small" />
+							</ContextMenu.ItemIndicator>
+							付点
+						</ContextMenu.CheckboxItem>
 
 						<ContextMenu.Sub>
 							<ContextMenu.SubTrigger className="radix-context-subtrigger">
