@@ -55,7 +55,6 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 	});
 
 	const addNote = (scoreId: number, noteProps: NoteProps) => {
-		console.log(currentId);
 		let added = false;
 		setScores((scores) => {
 			if (added) return scores;
@@ -152,12 +151,15 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 					settings: MusicSettings;
 				};
 				if (!importData.scores || !importData.settings) return;
-				setScores(importData.scores);
-				setMusicSettings(importData.settings);
-				const highestId = Math.max(
-					...importData.scores.flatMap((s) => s.notes).map((n) => n.id),
-				);
-				currentId = highestId + 1;
+				setScores([]);
+				setTimeout(() => {
+					setScores(importData.scores);
+					setMusicSettings(importData.settings);
+					const highestId = Math.max(
+						...importData.scores.flatMap((s) => s.notes).map((n) => n.id),
+					);
+					currentId = highestId + 1;
+				}, 1);
 			})
 			.catch((e) => console.error(e));
 	};

@@ -4,7 +4,10 @@ import { download, upload } from "@/utils/fileManager";
 import styled from "@emotion/styled";
 import {
 	Add,
+	CloudUpload,
 	Download,
+	Downloading,
+	DriveFolderUpload,
 	MusicVideo,
 	Save,
 	SettingsApplications,
@@ -94,7 +97,7 @@ const MenuBar = () => {
 							jsonImport();
 						}}
 					>
-						<Upload fontSize="large" />
+						<DriveFolderUpload fontSize="large" />
 					</IconButton>
 				</Tooltip>
 				<Tooltip title="Music Settings">

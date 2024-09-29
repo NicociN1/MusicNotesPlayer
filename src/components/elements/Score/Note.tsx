@@ -20,6 +20,7 @@ export interface NoteProps {
 	y: number;
 	label: string;
 	dotted: boolean;
+	fontScaleFactor: number;
 	scoreId: number;
 	// dotted: boolean;
 	id: number;
@@ -64,7 +65,6 @@ const Label = styled.div`
 `;
 
 const Note = (props: NoteProps) => {
-	//TODO 4/4拍ずつ配置できるようにする
 	const { updateNote, getNote } = useScoresGlobal();
 	const [isDragging, setIsDragging] = useState(false);
 
@@ -95,7 +95,7 @@ const Note = (props: NoteProps) => {
 			content: "";
 			width: 100%;
 			height: 50%;
-			background-color: color-mix(in lch, ${props.backgroundColor}, white 10%);
+			background-color: color-mix(in srgb, ${props.backgroundColor}, white 10%);
 		}
 	`;
 
@@ -116,12 +116,19 @@ const Note = (props: NoteProps) => {
 				}}
 			>
 				<NoteContextMenu noteId={props.id} scoreId={props.scoreId}>
-					<NoteContainer className="container" tabIndex={0}>
+					<NoteContainer
+						className="container"
+						tabIndex={0}
+						style={{
+							opacity: isDragging ? 0.7 : 1,
+							zIndex: isDragging ? 10 : 0,
+						}}
+					>
 						<NoteBackground
 							style={{
 								backgroundColor: props.backgroundColor,
 								boxShadow: isDragging
-									? "4px 4px 8px 2px #00000088"
+									? "4px 4px 6px #00000088"
 									: // : "2px 2px 8px #00000088",
 										"",
 							}}
@@ -129,7 +136,7 @@ const Note = (props: NoteProps) => {
 						<Label
 							style={{
 								color: props.color,
-								fontSize: `${props.noteSize * 0.7}px`,
+								fontSize: `${props.noteSize * 0.7 * props.fontScaleFactor}px`,
 								left: `${props.noteSize * 0.3}px`,
 							}}
 						>

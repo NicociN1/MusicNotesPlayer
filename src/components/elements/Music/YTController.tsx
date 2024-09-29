@@ -229,7 +229,6 @@ const YouTubeController = () => {
 			lastMeasureCount.current !== currentMeasureCount &&
 			lastMeasureCount.current >= 0
 		) {
-			console.log(currentMeasureCount, lastMeasureCount.current);
 			lastMeasureCount.current = currentMeasureCount;
 			scoreScroller(saveData.bpm, delayedTime, mainScore);
 		}
@@ -287,7 +286,6 @@ const YouTubeController = () => {
 							<VolumeUpRounded
 								sx={{ fontSize: "32px", color: "white" }}
 								onClick={() => {
-									console.log(isMobile);
 									if (!isMobile) {
 										setVisibleVolume(!isVisibleVolume);
 									} else {

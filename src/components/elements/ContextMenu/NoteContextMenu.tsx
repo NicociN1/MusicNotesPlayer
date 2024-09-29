@@ -56,13 +56,13 @@ const colorItems = [
 ];
 const beatItems = [
 	{
-		label: "4 / 1 拍",
-		value: 1,
+		label: "4 / 16 拍",
+		value: 16,
 		key: "1",
 	},
 	{
-		label: "4 / 2 拍",
-		value: 2,
+		label: "4 / 8 拍",
+		value: 8,
 		key: "2",
 	},
 	{
@@ -71,14 +71,31 @@ const beatItems = [
 		key: "3",
 	},
 	{
-		label: "4 / 8 拍",
-		value: 8,
+		label: "4 / 2 拍",
+		value: 2,
 		key: "4",
 	},
 	{
-		label: "4 / 16 拍",
-		value: 16,
+		label: "4 / 1 拍",
+		value: 1,
 		key: "5",
+	},
+];
+const fontSizeItems = [
+	{
+		label: "大",
+		value: 1,
+		key: "1",
+	},
+	{
+		label: "中",
+		value: 0.75,
+		key: "2",
+	},
+	{
+		label: "小",
+		value: 0.5,
+		key: "3",
 	},
 ];
 
@@ -91,6 +108,11 @@ interface ContextMenuProps {
 const NoteContextMenu = (props: ContextMenuProps) => {
 	const { getNote, removeNote, updateNote, addNote, createNewId } = useScoresGlobal();
 
+	const handleChangeFontSize = (fontScale: number) => {
+		const noteProps = getNote(props.scoreId, props.noteId);
+		if (!noteProps) return;
+		updateNote(props.scoreId, { ...noteProps, fontScaleFactor: fontScale });
+	};
 	const handleChangeColor = (color: string) => {
 		const noteProps = getNote(props.scoreId, props.noteId);
 		if (!noteProps) return;
@@ -98,25 +120,20 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 	};
 	const handleChangeBackgroundColor = (color: string) => {
 		const noteProps = getNote(props.scoreId, props.noteId);
-		console.log("getNote");
 		if (!noteProps) return;
-		console.log("updateNote");
 		updateNote(props.scoreId, { ...noteProps, backgroundColor: color });
 	};
-	const handleEditLabel = () => {};
 	const handleDuplicate = () => {
 		const noteProps = getNote(props.scoreId, props.noteId);
 		if (!noteProps) return;
 		const newId = createNewId();
-		console.log(noteProps.x);
 
 		const newNote = {
 			...noteProps,
 			id: newId,
-			x: noteProps.x + noteProps.beatSize,
+			x: noteProps.x + noteProps.beatSize * noteProps.beatCount,
 			y: noteProps.y,
 		};
-		console.log(newNote);
 		addNote(props.scoreId, newNote);
 	};
 	const handleChangeBeat = (beat: number) => {
@@ -130,11 +147,10 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 	const [backgroundColor, setBackgroundColor] = useState(
 		noteProps?.backgroundColor ?? "black",
 	);
-	const [beat, setBeat] = useState(
-		noteProps ? (noteProps.beatCount * 4).toString() : "1",
-	);
+	const [beat, setBeat] = useState(noteProps ? 4 / noteProps.beatCount : 1);
 	const [dotted, setDotted] = useState(noteProps?.dotted ?? false);
 	const [labelDialogOpen, setLabelDialogOpen] = useState(false);
+	const [fontSize, setFontSize] = useState(noteProps?.fontScaleFactor ?? 1);
 
 	return (
 		<>
@@ -167,7 +183,7 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 							<ContextMenu.Portal>
 								<ContextMenu.SubContent className="radix-context-subcontent">
 									<ContextMenu.RadioGroup
-										value={beat}
+										value={beat.toString()}
 										className="radix-context-radiogroup"
 									>
 										{beatItems.map((b) => (
@@ -178,7 +194,7 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 												onClick={(e) => {
 													e.preventDefault();
 													handleChangeBeat(b.value);
-													setBeat(b.value.toString());
+													setBeat(b.value);
 												}}
 											>
 												{b.label}
@@ -188,26 +204,28 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 											</ContextMenuRadioItem>
 										))}
 									</ContextMenu.RadioGroup>
+
+									<ContextMenu.Separator className="radix-context-separator" />
+
+									<ContextMenu.CheckboxItem
+										checked={dotted}
+										onClick={(e) => {
+											const newNote = getNote(props.scoreId, props.noteId);
+											if (!newNote) return;
+											updateNote(props.scoreId, { ...newNote, dotted: !dotted });
+											setDotted(!dotted);
+											e.preventDefault();
+										}}
+										className="radix-context-checkbox"
+									>
+										<ContextMenu.ItemIndicator className="radix-context-indicator">
+											<Check fontSize="small" />
+										</ContextMenu.ItemIndicator>
+										付点
+									</ContextMenu.CheckboxItem>
 								</ContextMenu.SubContent>
 							</ContextMenu.Portal>
 						</ContextMenu.Sub>
-
-						<ContextMenu.CheckboxItem
-							checked={dotted}
-							onClick={(e) => {
-								const newNote = getNote(props.scoreId, props.noteId);
-								if (!newNote) return;
-								updateNote(props.scoreId, { ...newNote, dotted: !dotted });
-								setDotted(!dotted);
-								e.preventDefault();
-							}}
-							className="radix-context-checkbox"
-						>
-							<ContextMenu.ItemIndicator className="radix-context-indicator">
-								<Check fontSize="small" />
-							</ContextMenu.ItemIndicator>
-							付点
-						</ContextMenu.CheckboxItem>
 
 						<ContextMenu.Sub>
 							<ContextMenu.SubTrigger className="radix-context-subtrigger">
@@ -281,6 +299,41 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 												>
 													<Square />
 												</div>
+												<ContextMenu.ItemIndicator className="radix-context-indicator">
+													<Circle sx={{ fontSize: 8 }} />
+												</ContextMenu.ItemIndicator>
+											</ContextMenuRadioItem>
+										))}
+									</ContextMenu.RadioGroup>
+								</ContextMenu.SubContent>
+							</ContextMenu.Portal>
+						</ContextMenu.Sub>
+
+						<ContextMenu.Sub>
+							<ContextMenu.SubTrigger className="radix-context-subtrigger">
+								文字サイズ
+								<div className="radix-context-rightitem">
+									<ChevronRight />
+								</div>
+							</ContextMenu.SubTrigger>
+							<ContextMenu.Portal>
+								<ContextMenu.SubContent className="radix-context-subcontent">
+									<ContextMenu.RadioGroup
+										value={fontSize.toString()}
+										className="radix-context-radiogroup"
+									>
+										{fontSizeItems.map((v) => (
+											<ContextMenuRadioItem
+												className="radix-context-radioitem"
+												value={v.value.toString()}
+												key={v.key}
+												onClick={(e) => {
+													e.preventDefault();
+													handleChangeFontSize(v.value);
+													setFontSize(v.value);
+												}}
+											>
+												{v.label}
 												<ContextMenu.ItemIndicator className="radix-context-indicator">
 													<Circle sx={{ fontSize: 8 }} />
 												</ContextMenu.ItemIndicator>

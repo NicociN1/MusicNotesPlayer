@@ -1,7 +1,7 @@
 import { MusicSettings, useScoresGlobal } from "@/hooks/ScoresGlobal";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Checkbox, Input, InputNumber } from "antd";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ScoreProps } from "../Score/Score";
 
 interface MusicSettingsDialog {
@@ -15,13 +15,17 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 	const youtubeUrlValueRef = useRef<string>(saveData.youtubeUrl);
 	const startTimeValueRef = useRef<number>(saveData.startTime);
 
-	const handleClose = () => {
-		props.onOpenChange(false);
-		setTimeout(() => {
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		if (props.open) {
 			bpmValueRef.current = saveData.bpm;
 			youtubeUrlValueRef.current = saveData.youtubeUrl;
 			startTimeValueRef.current = saveData.startTime;
-		}, 100);
+		}
+	}, [props.open]);
+
+	const handleClose = () => {
+		props.onOpenChange(false);
 	};
 
 	return (

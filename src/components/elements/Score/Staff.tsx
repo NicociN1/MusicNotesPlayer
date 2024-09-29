@@ -55,7 +55,6 @@ const Staff = (props: StaffProps) => {
 					<Line
 						key={index}
 						onClick={() => {
-							console.log("onClick");
 							let added = false;
 							if (!added) {
 								added = true;
@@ -72,6 +71,7 @@ const Staff = (props: StaffProps) => {
 									noteSize: scoreProps.notesSize,
 									dotted: false,
 									scoreId: -1,
+									fontScaleFactor: 1,
 									id: createId(),
 								};
 								addNote(props.scoreId, note);
