@@ -135,6 +135,18 @@ const YouTubeController = () => {
 				</ButtonItem>
 			),
 		},
+		{
+			key: "5",
+			label: (
+				<ButtonItem
+					onClick={() => {
+						iFrameRef.current?.getInternalPlayer().setPlaybackRate(0.25);
+					}}
+				>
+					0.25倍速
+				</ButtonItem>
+			),
+		},
 	];
 
 	const seekTo = (time: number, seekEnd = true) => {

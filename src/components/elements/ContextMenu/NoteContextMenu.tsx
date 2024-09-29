@@ -125,10 +125,15 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 		updateNote(props.scoreId, { ...noteProps, beatCount: 4 / beat });
 	};
 
-	const [color, setColor] = useState("white");
-	const [backgroundColor, setBackgroundColor] = useState("black");
-	const [beat, setBeat] = useState("1");
-	const [dotted, setDotted] = useState(false);
+	const noteProps = getNote(props.scoreId, props.noteId);
+	const [color, setColor] = useState(noteProps?.color ?? "white");
+	const [backgroundColor, setBackgroundColor] = useState(
+		noteProps?.backgroundColor ?? "black",
+	);
+	const [beat, setBeat] = useState(
+		noteProps ? (noteProps.beatCount * 4).toString() : "1",
+	);
+	const [dotted, setDotted] = useState(noteProps?.dotted ?? false);
 	const [labelDialogOpen, setLabelDialogOpen] = useState(false);
 
 	return (
