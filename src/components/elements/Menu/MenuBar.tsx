@@ -50,8 +50,8 @@ const MenuBar = () => {
 	const [isOpened, setOpen] = useState<boolean>(false);
 	const [scoreDialogOpen, setScoreDialogOpen] = useState(false);
 	const [musicDialogOpen, setMusicDialogOpen] = useState(false);
-	const { scores, setScores, musicSettings, setMusicSettings, jsonImport, jsonExport } =
-		useScoresGlobal();
+	const { jsonImport, jsonExport } = useScoresGlobal();
+	const { iFrameRef } = useYouTubeGlobal();
 
 	return (
 		<ControlBarWrapper style={{ maxHeight: isOpened ? "400px" : "100%" }}>
@@ -84,7 +84,12 @@ const MenuBar = () => {
 					<IconButton
 						sx={{ color: "white" }}
 						onClick={() => {
-							jsonExport();
+							if (!iFrameRef.current) return;
+							const title = iFrameRef.current
+								.getInternalPlayer()
+								?.getIframe()
+								?.title?.substring(0, 15) as string | undefined;
+							jsonExport(title ?? "");
 						}}
 					>
 						<Save fontSize="large" />

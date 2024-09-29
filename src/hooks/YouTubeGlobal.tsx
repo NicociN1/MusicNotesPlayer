@@ -4,6 +4,7 @@ import React, {
 	createContext,
 	MutableRefObject,
 	useContext,
+	useEffect,
 	useRef,
 	useState,
 } from "react";
@@ -20,6 +21,7 @@ const Context = createContext(
 		setCurrentTime: React.Dispatch<React.SetStateAction<number>>;
 		duration: number;
 		setDuration: React.Dispatch<React.SetStateAction<number>>;
+		title: MutableRefObject<string>;
 	},
 );
 
@@ -30,6 +32,14 @@ export const YouTubeGlobalProvider = ({ children }: { children: React.ReactNode 
 	const onPlayerStateChange = useRef(null);
 	const [currentTime, setCurrentTime] = useState(0);
 	const [duration, setDuration] = useState(0);
+	const title = useRef("");
+
+	useEffect(() => {
+		const player = iFrameRef.current?.getInternalPlayer();
+		console.log(iFrameRef.current, player);
+		if (!iFrameRef.current || !player) return;
+		console.log(iFrameRef.current.getInternalPlayer().getIframe().title);
+	}, [url]);
 
 	return (
 		<Context.Provider
@@ -43,6 +53,7 @@ export const YouTubeGlobalProvider = ({ children }: { children: React.ReactNode 
 				setCurrentTime: setCurrentTime,
 				duration: duration,
 				setDuration: setDuration,
+				title: title,
 			}}
 		>
 			{children}

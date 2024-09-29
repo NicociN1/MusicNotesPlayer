@@ -11,6 +11,7 @@ import React, {
 	useRef,
 	useState,
 } from "react";
+import { useYouTubeGlobal } from "./YouTubeGlobal";
 
 let currentId = 0;
 const createNewId = () => currentId++;
@@ -35,7 +36,7 @@ const GlobalContext = createContext(
 		setMusicSettings: (saveData: MusicSettings) => void;
 		musicSettings: MusicSettings;
 		jsonImport: () => void;
-		jsonExport: () => void;
+		jsonExport: (fileName: string) => void;
 	},
 );
 
@@ -170,10 +171,10 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 			})
 			.catch((e) => console.error(e));
 	};
-	const jsonExport = () => {
+	const jsonExport = (fileName: string) => {
 		download(
 			JSON.stringify({ scores: scores, settings: musicSettings }),
-			"Score File.json",
+			`MusicNotes ${fileName}.json`,
 			"application/json",
 		);
 	};
