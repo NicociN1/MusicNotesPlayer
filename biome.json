@@ -26,7 +26,8 @@
       },
       "a11y": {
         "useButtonType": "warn",
-        "useKeyWithClickEvents": "off"
+        "useKeyWithClickEvents": "off",
+        "noSvgWithoutTitle": "warn"
       }
     }
   },

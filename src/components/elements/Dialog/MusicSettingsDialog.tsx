@@ -1,4 +1,4 @@
-import { SaveData, useScoresGlobal } from "@/hooks/ScoresGlobal";
+import { MusicSettings, useScoresGlobal } from "@/hooks/ScoresGlobal";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Checkbox, Input, InputNumber } from "antd";
 import { useRef } from "react";
@@ -72,7 +72,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 							type="button"
 							className="radix-dialog-action-right"
 							onClick={() => {
-								const newSaveData = {} as SaveData;
+								const newSaveData = {} as MusicSettings;
 								newSaveData.bpm = bpmValueRef.current;
 								newSaveData.youtubeUrl = youtubeUrlValueRef.current;
 								newSaveData.startTime = startTimeValueRef.current;

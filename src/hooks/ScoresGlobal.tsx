@@ -1,6 +1,7 @@
 "use client";
 import { NoteProps } from "@/components/elements/Score/Note";
 import { ScoreProps } from "@/components/elements/Score/Score";
+import { download, upload } from "@/utils/fileManager";
 import PropTypes from "prop-types";
 import React, {
 	createContext,
@@ -11,10 +12,8 @@ import React, {
 	useState,
 } from "react";
 
-const createNewId = (() => {
-	let currentId = 0;
-	return () => currentId++;
-})();
+let currentId = 0;
+const createNewId = () => currentId++;
 
 const GlobalContext = createContext(
 	{} as {
@@ -33,12 +32,14 @@ const GlobalContext = createContext(
 		updateScore: (scoreProps: ScoreProps) => void;
 		updateMainScore: (scoreId: number | null) => void;
 		getMainScore: () => ScoreProps | null;
-		setMusicSettings: (saveData: SaveData) => void;
-		musicSettings: SaveData;
+		setMusicSettings: (saveData: MusicSettings) => void;
+		musicSettings: MusicSettings;
+		jsonImport: () => void;
+		jsonExport: () => void;
 	},
 );
 
-export interface SaveData {
+export interface MusicSettings {
 	bpm: number;
 	youtubeUrl: string;
 	startTime: number;
@@ -47,13 +48,14 @@ export interface SaveData {
 export const MusicScoresProvider = ({ children }: { children: React.ReactNode }) => {
 	const [measureCount, setMeasureCount] = useState(0);
 	const [scores, setScores] = useState<ScoreProps[]>([]);
-	const [musicSettings, setMusicSettings] = useState<SaveData>({
+	const [musicSettings, setMusicSettings] = useState<MusicSettings>({
 		bpm: 106,
-		youtubeUrl: "https://youtu.be/0xSiBpUdW4E",
+		youtubeUrl: "https://youtube.com/watch?v=0xSiBpUdW4E",
 		startTime: 2.5,
 	});
 
 	const addNote = (scoreId: number, noteProps: NoteProps) => {
+		console.log(currentId);
 		let added = false;
 		setScores((scores) => {
 			if (added) return scores;
@@ -142,6 +144,31 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 		return scores.find((s) => s.mainScore) ?? null;
 	};
 
+	const jsonImport = () => {
+		upload()
+			.then((data) => {
+				const importData = JSON.parse(data) as {
+					scores: ScoreProps[];
+					settings: MusicSettings;
+				};
+				if (!importData.scores || !importData.settings) return;
+				setScores(importData.scores);
+				setMusicSettings(importData.settings);
+				const highestId = Math.max(
+					...importData.scores.flatMap((s) => s.notes).map((n) => n.id),
+				);
+				currentId = highestId + 1;
+			})
+			.catch((e) => console.error(e));
+	};
+	const jsonExport = () => {
+		download(
+			JSON.stringify({ scores: scores, settings: musicSettings }),
+			"Score File.json",
+			"application/json",
+		);
+	};
+
 	return (
 		<GlobalContext.Provider
 			value={{
@@ -162,6 +189,8 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 				getMainScore: getMainScore,
 				setMusicSettings: setMusicSettings,
 				musicSettings: musicSettings,
+				jsonImport: jsonImport,
+				jsonExport: jsonExport,
 			}}
 		>
 			{children}

@@ -18,7 +18,7 @@ import Staff, { StaffProps } from "./Staff";
 
 const DraggableWrapper = styled.div`
 	border: solid 1px lightgrey;
-	/* border-radius: 4px; */
+	border-radius: 8px;
 	position: absolute;
 	display: grid;
 	grid-template-columns: 32px 1fr 32px;

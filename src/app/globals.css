@@ -65,6 +65,10 @@ body {
 .radix-context-radioitem[data-highlighted],
 .radix-context-subtrigger[data-highlighted] {
   background-color: lightgray;
+  &:active {
+    background-color: black;
+    color: white;
+  }
 }
 
 .radix-context-separator {

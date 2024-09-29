@@ -8,6 +8,7 @@ import { isMobile } from "react-device-detect";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import { Resizable } from "react-resizable";
 import NoteContextMenu from "../ContextMenu/NoteContextMenu";
+import { NoteSvg } from "./NoteSvg";
 
 export interface NoteProps {
 	noteSize: number;
@@ -25,24 +26,23 @@ export interface NoteProps {
 }
 
 const NoteWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: absolute;
 	top: 0;
 	left: 0;
-	transition: 0.05s transform ease, 0.15s width ease-in, 0.15s height ease-in;
+	transition: 0.05s transform ease, 0.1s width;;
 	width: 100%;
 	height: 100%;
+	cursor: pointer;
 `;
 
 const NoteContainer = styled.div`
-  display: grid;
-	width: calc(100% - 6px);
-	height: calc(85%);
-  grid-template-rows: 100%;
-  position: relative;
+	width: 100%;
+	height: 100%;
+  position: absolute;
 	transition: 0.5s scale ease;
+	display: flex;
+	justify-content: center;
+	align-items: center;
   &:hover, &:active {
 		scale: 1.015;
   }
@@ -50,19 +50,13 @@ const NoteContainer = styled.div`
 		scale: 1.04;
 	} */
 `;
-const NoteBackground = styled.div`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-	border-radius: 99px;
-	cursor: pointer;
-`;
 
 const Label = styled.div`
   background-color: transparent;
   height: 100%;
 	width: 100%;
   position: absolute;
+	top: 0;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -88,6 +82,23 @@ const Note = (props: NoteProps) => {
 		});
 	};
 
+	const NoteBackground = styled.div`
+		width: calc(100% - 6px);
+		height: calc(100% - 6px);
+		position: absolute;
+		border-radius: 99px;
+		display: flex;
+		cursor: pointer;
+		transition: 0.1s background-color;
+		overflow: hidden;
+		&::before {
+			content: "";
+			width: 100%;
+			height: 50%;
+			background-color: color-mix(in lch, ${props.backgroundColor}, white 10%);
+		}
+	`;
+
 	return (
 		<Draggable
 			grid={[props.beatSize / 4, props.noteSize]}
@@ -95,7 +106,7 @@ const Note = (props: NoteProps) => {
 			onDrag={handleDrag}
 			onStart={() => setIsDragging(true)}
 			onStop={() => setIsDragging(false)}
-			handle=".background"
+			handle=".container"
 			bounds=".staff-container"
 		>
 			<NoteWrapper
@@ -104,10 +115,9 @@ const Note = (props: NoteProps) => {
 					height: props.noteSize,
 				}}
 			>
-				<NoteContainer tabIndex={0}>
-					<NoteContextMenu noteId={props.id} scoreId={props.scoreId}>
+				<NoteContextMenu noteId={props.id} scoreId={props.scoreId}>
+					<NoteContainer className="container" tabIndex={0}>
 						<NoteBackground
-							className="background"
 							style={{
 								backgroundColor: props.backgroundColor,
 								boxShadow: isDragging
@@ -116,17 +126,17 @@ const Note = (props: NoteProps) => {
 										"",
 							}}
 						/>
-					</NoteContextMenu>
-					<Label
-						style={{
-							color: props.color,
-							fontSize: `${props.noteSize * 0.7}px`,
-							paddingLeft: `${props.noteSize * 0.25}px`,
-						}}
-					>
-						{props.label}
-					</Label>
-				</NoteContainer>
+						<Label
+							style={{
+								color: props.color,
+								fontSize: `${props.noteSize * 0.7}px`,
+								left: `${props.noteSize * 0.3}px`,
+							}}
+						>
+							{props.label}
+						</Label>
+					</NoteContainer>
+				</NoteContextMenu>
 			</NoteWrapper>
 		</Draggable>
 	);

@@ -1,4 +1,4 @@
-import { SaveData as MusicSettings, useScoresGlobal } from "@/hooks/ScoresGlobal";
+import { MusicSettings, useScoresGlobal } from "@/hooks/ScoresGlobal";
 import { useYouTubeGlobal } from "@/hooks/YouTubeGlobal";
 import { download, upload } from "@/utils/fileManager";
 import styled from "@emotion/styled";
@@ -47,8 +47,8 @@ const MenuBar = () => {
 	const [isOpened, setOpen] = useState<boolean>(false);
 	const [scoreDialogOpen, setScoreDialogOpen] = useState(false);
 	const [musicDialogOpen, setMusicDialogOpen] = useState(false);
-	const { scores, setScores, musicSettings, setMusicSettings } = useScoresGlobal();
-	const { currentTime, setCurrentTime, duration, setDuration } = useYouTubeGlobal();
+	const { scores, setScores, musicSettings, setMusicSettings, jsonImport, jsonExport } =
+		useScoresGlobal();
 
 	return (
 		<ControlBarWrapper style={{ maxHeight: isOpened ? "400px" : "100%" }}>
@@ -81,11 +81,7 @@ const MenuBar = () => {
 					<IconButton
 						sx={{ color: "white" }}
 						onClick={() => {
-							download(
-								JSON.stringify({ scores: scores, settings: musicSettings }),
-								"Score File.json",
-								"application/json",
-							);
+							jsonExport();
 						}}
 					>
 						<Save fontSize="large" />
@@ -95,17 +91,7 @@ const MenuBar = () => {
 					<IconButton
 						sx={{ color: "white" }}
 						onClick={async () => {
-							upload()
-								.then((data) => {
-									const importData = JSON.parse(data) as {
-										scores: ScoreProps[];
-										settings: MusicSettings;
-									};
-									if (!importData.scores || !importData.settings) return;
-									setScores(importData.scores);
-									setMusicSettings(importData.settings);
-								})
-								.catch((e) => console.error(e));
+							jsonImport();
 						}}
 					>
 						<Upload fontSize="large" />
