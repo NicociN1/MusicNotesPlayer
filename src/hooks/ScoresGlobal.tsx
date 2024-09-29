@@ -153,7 +153,14 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 				if (!importData.scores || !importData.settings) return;
 				setScores([]);
 				setTimeout(() => {
-					setScores(importData.scores);
+					const newScore = importData.scores.map((s) => ({
+						...s,
+						notes: s.notes.map((n) => ({
+							...n,
+							fontScaleFactor: n.fontScaleFactor ?? 1,
+						})),
+					}));
+					setScores(newScore);
 					setMusicSettings(importData.settings);
 					const highestId = Math.max(
 						...importData.scores.flatMap((s) => s.notes).map((n) => n.id),
