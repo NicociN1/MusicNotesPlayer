@@ -1,15 +1,9 @@
 import { useScoresGlobal } from "@/hooks/ScoresGlobal";
 import styled from "@emotion/styled";
-import { Delete, Palette } from "@mui/icons-material";
-import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
-import { Dropdown, MenuProps } from "antd";
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
-import { isMobile } from "react-device-detect";
+import { KeyboardEvent, useRef, useState } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
-import { Resizable } from "react-resizable";
 import NoteContextMenu from "../ContextMenu/NoteContextMenu";
 import LabelEditDialog from "../Dialog/LabelEditDialog";
-import { NoteSvg } from "./NoteSvg";
 
 export interface NoteProps {
 	noteSize: number;
