@@ -26,7 +26,7 @@ export const MusicControlBarLayout = styled.div`
 
 export const ScoreSpaceLayout = styled.div`
   width: 100vw;
-  height: calc(100vh - 60px - 100px);
+  height: calc(100% - 60px - 100px);
   position: absolute;
   top: 60px;
   overflow: scroll;
