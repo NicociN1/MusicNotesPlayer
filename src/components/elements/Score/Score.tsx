@@ -96,102 +96,106 @@ const Score = (props: ScoreProps) => {
 	};
 
 	return (
-		<Draggable
-			handle=".drag-handle"
-			onStart={() => setDragging(true)}
-			onStop={handleDragStop}
-			bounds={{ left: 0, top: 0 }}
-			position={{ x: props.x, y: props.y }}
-		>
-			<DraggableWrapper
-				style={{
-					boxShadow: `0 0 ${isDragging ? 30 : 10}px -2px #00000088`,
-					backgroundColor: isDragging ? "#ffffff88" : "white",
-					zIndex: isDragging ? 1 : 0,
+		<>
+			<ScoreEditDialog
+				isEditor={true}
+				open={scoreDialogOpen}
+				onOpenChange={(open) => {
+					setScoreDialogOpen(open);
 				}}
+				scoreId={props.id}
+			/>
+			<Draggable
+				handle=".drag-handle"
+				onStart={() => setDragging(true)}
+				onStop={handleDragStop}
+				bounds={{ left: 0, top: 0 }}
+				position={{ x: props.x, y: props.y }}
 			>
-				<DragHandleBar className="drag-handle" />
-				<ScoreContainer
+				<DraggableWrapper
 					style={{
-						gridTemplateColumns: `${props.notesSize}px ${props.beatSize * props.beatCount * props.measureCount}px`,
-						gridTemplateRows: `repeat(${props.lineCount}, ${props.notesSize}px)`,
+						boxShadow: `0 0 ${isDragging ? 30 : 10}px -2px #00000088`,
+						backgroundColor: isDragging ? "#ffffff88" : "white",
+						zIndex: isDragging ? 1 : 0,
 					}}
 				>
-					<LabelWrapper
+					<DragHandleBar className="drag-handle" />
+					<ScoreContainer
 						style={{
-							width: props.notesSize,
-							minWidth: props.notesSize,
-							height: props.lineCount * props.notesSize,
+							gridTemplateColumns: `${props.notesSize}px ${props.beatSize * props.beatCount * props.measureCount}px`,
+							gridTemplateRows: `repeat(${props.lineCount}, ${props.notesSize}px)`,
 						}}
 					>
-						{Array.from({ length: props.lineCount }, (_v, i) => (
-							<StyledInput
-								type="text"
-								key={i}
-								defaultValue={props.stringLabels.find((v) => v.stringIndex === i)?.label}
-								onChange={(e) => {
-									const newProps = { ...props };
-									const index = newProps.stringLabels.findIndex(
-										(x) => x.stringIndex === i,
-									);
-									const stringLabel = {
-										stringIndex: i,
-										label: e.target.value,
-									};
-									if (index !== -1) {
-										newProps.stringLabels[index] = stringLabel;
-									} else {
-										newProps.stringLabels.push(stringLabel);
+						<LabelWrapper
+							style={{
+								width: props.notesSize,
+								minWidth: props.notesSize,
+								height: props.lineCount * props.notesSize,
+							}}
+						>
+							{Array.from({ length: props.lineCount }, (_v, i) => (
+								<StyledInput
+									type="text"
+									key={i}
+									defaultValue={
+										props.stringLabels.find((v) => v.stringIndex === i)?.label
 									}
-									updateScore(newProps);
-								}}
-								style={{
-									fontSize: `${props.notesSize * 0.7}px`,
-								}}
+									onChange={(e) => {
+										const newProps = { ...props };
+										const index = newProps.stringLabels.findIndex(
+											(x) => x.stringIndex === i,
+										);
+										const stringLabel = {
+											stringIndex: i,
+											label: e.target.value,
+										};
+										if (index !== -1) {
+											newProps.stringLabels[index] = stringLabel;
+										} else {
+											newProps.stringLabels.push(stringLabel);
+										}
+										updateScore(newProps);
+									}}
+									style={{
+										fontSize: `${props.notesSize * 0.7}px`,
+									}}
+								/>
+							))}
+						</LabelWrapper>
+						<StaffContainer
+							className="staff-container"
+							style={{
+								width: props.beatSize * props.beatCount * props.measureCount,
+								height: props.notesSize * props.lineCount,
+								position: "relative",
+							}}
+						>
+							<Staff
+								beatCount={props.beatCount}
+								lineCount={props.lineCount}
+								measureCount={props.measureCount}
+								scoreId={props.id}
 							/>
-						))}
-					</LabelWrapper>
-					<StaffContainer
-						className="staff-container"
-						style={{
-							width: props.beatSize * props.beatCount * props.measureCount,
-							height: props.notesSize * props.lineCount,
-							position: "relative",
+							{props.notes.map((n) => (
+								<Note
+									{...n}
+									noteSize={props.notesSize}
+									beatSize={props.beatSize}
+									key={n.id}
+								/>
+							))}
+						</StaffContainer>
+					</ScoreContainer>
+					<SettingsButton
+						onClick={() => {
+							setScoreDialogOpen(true);
 						}}
 					>
-						<Staff
-							beatCount={props.beatCount}
-							lineCount={props.lineCount}
-							measureCount={props.measureCount}
-							scoreId={props.id}
-						/>
-						{props.notes.map((n) => (
-							<Note
-								{...n}
-								noteSize={props.notesSize}
-								beatSize={props.beatSize}
-								key={n.id}
-							/>
-						))}
-					</StaffContainer>
-				</ScoreContainer>
-				<SettingsButton
-					onClick={() => {
-						setScoreDialogOpen(true);
-					}}
-				>
-					<Settings htmlColor="gray" sx={{ fontSize: "2em" }} />
-				</SettingsButton>
-				<ScoreEditDialog
-					isEditor={true}
-					open={scoreDialogOpen}
-					onOpenChange={(open) => {
-						setScoreDialogOpen(open);
-					}}
-					scoreId={props.id}
-				/>
-			</DraggableWrapper>
-		</Draggable>
+						<Settings htmlColor="gray" sx={{ fontSize: "2em" }} />
+					</SettingsButton>
+				</DraggableWrapper>
+			</Draggable>
+		</>
 	);
 };
 

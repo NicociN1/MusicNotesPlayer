@@ -176,11 +176,6 @@ const YouTubeController = () => {
 		if (!iFrame) return;
 		iFrame.getInternalPlayer().pauseVideo();
 	};
-	const clickPrev = () => {
-		const iFrame = iFrameRef.current;
-		if (!iFrame) return;
-		seekTo(0);
-	};
 	const sliderSeek = (time: number) => {
 		seekTo(time, false);
 	};
@@ -254,12 +249,8 @@ const YouTubeController = () => {
 		},
 		{
 			key: "ArrowLeft",
-			action: (e) => {
-				if (!(e.metaKey || e.ctrlKey)) {
-					clickRewind();
-				} else {
-					clickPrev();
-				}
+			action: () => {
+				clickRewind();
 			},
 		},
 		{
@@ -272,14 +263,22 @@ const YouTubeController = () => {
 			key: "ArrowDown",
 			ctrlKey: true,
 			action: () => {
-				setVolume(Math.max(0, volume - 10));
+				const iFrame = iFrameRef.current;
+				if (!iFrame) return;
+				const changedVolume = Math.max(0, volume - 10);
+				setVolume(changedVolume);
+				iFrame.getInternalPlayer().setVolume(changedVolume);
 			},
 		},
 		{
 			key: "ArrowUp",
 			ctrlKey: true,
 			action: () => {
-				setVolume(Math.min(100, volume + 10));
+				const iFrame = iFrameRef.current;
+				if (!iFrame) return;
+				const changedVolume = Math.max(0, volume + 10);
+				setVolume(changedVolume);
+				iFrame.getInternalPlayer().setVolume(changedVolume);
 			},
 		},
 	]);

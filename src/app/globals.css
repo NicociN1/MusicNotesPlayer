@@ -30,6 +30,10 @@ body {
   overflow: hidden;
 }
 
+html, body, header {
+  height: 100%;
+}
+
 /* RadixUI ContextMenu */
 .radix-context-content,
 .radix-context-subcontent {
@@ -111,7 +115,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90vw;
-  max-width: 400px;
+  max-width: 460px;
 }
 
 /* タイトルと説明のスタイル */

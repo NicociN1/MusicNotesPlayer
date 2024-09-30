@@ -69,6 +69,13 @@ const ScoreEditDialog = (props: ScoreEditDialogProps) => {
 					<Dialog.Title className="radix-dialog-title">楽譜設定</Dialog.Title>
 
 					<div className="radix-dialog-inputgroup">
+						動画に合わせてスクロール
+						<Checkbox
+							defaultChecked={scoreProps?.mainScore}
+							onChange={(v) => {
+								mainScoreValueRef.current = v.target.checked;
+							}}
+						/>
 						小節の数
 						<InputNumber
 							defaultValue={scoreProps?.measureCount ?? DMEASURECOUNT}
@@ -117,13 +124,6 @@ const ScoreEditDialog = (props: ScoreEditDialogProps) => {
 								notesSizeValueRef.current = v;
 							}}
 							style={{ width: "100%" }}
-						/>
-						メインスコアに設定
-						<Checkbox
-							defaultChecked={scoreProps?.mainScore}
-							onChange={(v) => {
-								mainScoreValueRef.current = v.target.checked;
-							}}
 						/>
 					</div>
 
