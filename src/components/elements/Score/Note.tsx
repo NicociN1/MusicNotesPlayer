@@ -50,7 +50,7 @@ const NoteContainer = styled.div`
 		scale: 1.015;
   }
 	&:focus {
-		scale: 1.03;
+		scale: 1.04;
 	}
 `;
 

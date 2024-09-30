@@ -111,7 +111,6 @@ const ScoreEditDialog = (props: ScoreEditDialogProps) => {
 						ノーツのサイズ
 						<InputNumber
 							addonAfter="px"
-							disabled={props.isEditor}
 							defaultValue={scoreProps?.notesSize ?? DNOTESSIZE}
 							onChange={(v) => {
 								if (!v) return;

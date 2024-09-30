@@ -241,19 +241,48 @@ const YouTubeController = () => {
 		iFrame.getInternalPlayer().setVolume(volume);
 	};
 
-	useGlobalShortcutKey(" ", () => {
-		if (isPlaying) {
-			clickPause();
-		} else {
-			clickPlay();
-		}
-	});
-	useGlobalShortcutKey("ArrowLeft", () => {
-		clickRewind();
-	});
-	useGlobalShortcutKey("ArrowRight", () => {
-		clickForward();
-	});
+	useGlobalShortcutKey([
+		{
+			key: " ",
+			action: () => {
+				if (isPlaying) {
+					clickPause();
+				} else {
+					clickPlay();
+				}
+			},
+		},
+		{
+			key: "ArrowLeft",
+			action: (e) => {
+				if (!(e.metaKey || e.ctrlKey)) {
+					clickRewind();
+				} else {
+					clickPrev();
+				}
+			},
+		},
+		{
+			key: "ArrowRight",
+			action: () => {
+				clickForward();
+			},
+		},
+		{
+			key: "ArrowDown",
+			ctrlKey: true,
+			action: () => {
+				setVolume(Math.max(0, volume - 10));
+			},
+		},
+		{
+			key: "ArrowUp",
+			ctrlKey: true,
+			action: () => {
+				setVolume(Math.min(100, volume + 10));
+			},
+		},
+	]);
 
 	return (
 		<YTControllerWrapper>
@@ -295,7 +324,7 @@ const YouTubeController = () => {
 						<FastForward sx={{ fontSize: "32px", color: "white" }} />
 					</IconButton>
 				</Tooltip>
-				<Tooltip placement="top" title="Change Volume">
+				<Tooltip placement="top" title="Change Volume (↑/↓)">
 					<IconButton aria-label="Change Volume">
 						{!isMuted ? (
 							<VolumeUpRounded

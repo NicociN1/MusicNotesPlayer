@@ -161,7 +161,7 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 							onSelect={() => setLabelDialogOpen(true)}
 							title="テキストを編集 (F2)"
 						>
-							テキストを編集
+							テキストを編集 (F2)
 						</ContextMenu.Item>
 
 						<ContextMenu.Sub>
@@ -338,7 +338,7 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 						<ContextMenu.Separator className="radix-context-separator" />
 
 						<ContextMenu.Item className="radix-context-item" onClick={handleDuplicate}>
-							複製
+							複製 (D)
 						</ContextMenu.Item>
 
 						<ContextMenu.Separator className="radix-context-separator" />
@@ -348,7 +348,7 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 							onClick={() => removeNote(props.scoreId, props.noteId)}
 							style={{ color: "red" }}
 						>
-							削除
+							削除 (Back)
 						</ContextMenu.Item>
 					</ContextMenu.Content>
 				</ContextMenu.Portal>

@@ -3,14 +3,7 @@ import { NoteProps } from "@/components/elements/Score/Note";
 import { ScoreProps } from "@/components/elements/Score/Score";
 import { download, upload } from "@/utils/fileManager";
 import PropTypes from "prop-types";
-import React, {
-	createContext,
-	RefObject,
-	useContext,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useYouTubeGlobal } from "./YouTubeGlobal";
 
 let currentId = 0;

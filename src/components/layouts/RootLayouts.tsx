@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 export const RootLayout = styled.div`
-  height: 100vh;
+  height: 100%;
   width: 100vw;
 `;
 
@@ -24,7 +24,7 @@ export const MusicControlBarLayout = styled.div`
   bottom: 0px;
 `;
 
-export const ScoresLayout = styled.div`
+export const ScoreSpaceLayout = styled.div`
   width: 100vw;
   height: calc(100vh - 60px - 100px);
   position: absolute;

@@ -8,7 +8,7 @@ import React, {
 	useRef,
 	useState,
 } from "react";
-import YouTubePlayer, { YouTubePlayerProps } from "react-player/youtube";
+import YouTubePlayer from "react-player/youtube";
 
 const Context = createContext(
 	{} as {
@@ -19,7 +19,6 @@ const Context = createContext(
 		onPlayerStateChange: MutableRefObject<((state: number) => void) | null>;
 		currentTime: number;
 		setCurrentTime: React.Dispatch<React.SetStateAction<number>>;
-		duration: number;
 		setDuration: React.Dispatch<React.SetStateAction<number>>;
 		title: MutableRefObject<string>;
 	},
@@ -51,7 +50,6 @@ export const YouTubeGlobalProvider = ({ children }: { children: React.ReactNode 
 				onPlayerStateChange: onPlayerStateChange,
 				currentTime: currentTime,
 				setCurrentTime: setCurrentTime,
-				duration: duration,
 				setDuration: setDuration,
 				title: title,
 			}}

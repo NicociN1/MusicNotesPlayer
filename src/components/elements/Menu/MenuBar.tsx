@@ -1,19 +1,8 @@
-import { MusicSettings, useScoresGlobal } from "@/hooks/ScoresGlobal";
+import { useGlobalShortcutKey } from "@/hooks/GlobalShortcutKey";
+import { useScoresGlobal } from "@/hooks/ScoresGlobal";
 import { useYouTubeGlobal } from "@/hooks/YouTubeGlobal";
-import { download, upload } from "@/utils/fileManager";
 import styled from "@emotion/styled";
-import {
-	Add,
-	CloudUpload,
-	Download,
-	Downloading,
-	DriveFolderUpload,
-	MusicVideo,
-	Save,
-	SettingsApplications,
-	Tune,
-	Upload,
-} from "@mui/icons-material";
+import { Add, DriveFolderUpload, MusicVideo, Save, Tune } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { useState } from "react";
 import MusicSettingsDialog from "../Dialog/MusicSettingsDialog";
@@ -53,6 +42,10 @@ const MenuBar = () => {
 	const { jsonImport, jsonExport } = useScoresGlobal();
 	const { iFrameRef } = useYouTubeGlobal();
 
+	useGlobalShortcutKey("m", () => {
+		setOpen(!isOpened);
+	});
+
 	return (
 		<ControlBarWrapper style={{ maxHeight: isOpened ? "400px" : "100%" }}>
 			<ScoreEditDialog
@@ -85,10 +78,9 @@ const MenuBar = () => {
 						sx={{ color: "white" }}
 						onClick={() => {
 							if (!iFrameRef.current) return;
-							const title = iFrameRef.current
-								.getInternalPlayer()
-								?.getIframe()
-								?.title?.substring(0, 15) as string | undefined;
+							const title = iFrameRef.current.getInternalPlayer()?.getIframe()?.title as
+								| string
+								| undefined;
 							jsonExport(title ?? "");
 						}}
 					>
@@ -114,7 +106,7 @@ const MenuBar = () => {
 						<Tune fontSize="large" />
 					</IconButton>
 				</Tooltip>
-				<Tooltip title="Music Video">
+				<Tooltip title="Music Video (M)">
 					<IconButton
 						onClick={() => setOpen(!isOpened)}
 						sx={{ color: "white", gridColumn: -2, gridRow: 1 }}

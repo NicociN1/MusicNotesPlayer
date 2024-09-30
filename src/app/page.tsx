@@ -7,7 +7,7 @@ import {
 	MenuBarLayout,
 	MusicControlBarLayout,
 	RootLayout,
-	ScoresLayout,
+	ScoreSpaceLayout,
 } from "@/components/layouts/RootLayouts";
 import { MusicScoresProvider, useScoresGlobal } from "@/hooks/ScoresGlobal";
 import { ScrollProvider } from "@/hooks/ScrollGlobal";
@@ -44,9 +44,12 @@ function App(): JSX.Element {
 							<MenuBarLayout>
 								<MenuBar /> {/* ControlBar */}
 							</MenuBarLayout>
-							<ScoresLayout id="scores-layout" onContextMenu={(e) => e.preventDefault()}>
+							<ScoreSpaceLayout
+								id="scores-layout"
+								onContextMenu={(e) => e.preventDefault()}
+							>
 								<MusicScore />
-							</ScoresLayout>
+							</ScoreSpaceLayout>
 							<MusicControlBarLayout>
 								<MusicControlBar /> {/* MusicControlBar */}
 							</MusicControlBarLayout>

@@ -1,19 +1,32 @@
 import { useEffect } from "react";
 
-export const useGlobalShortcutKey = (
-	key: string,
-	action: (event: globalThis.KeyboardEvent) => void,
-) => {
+interface ShortcutKey {
+	key: string;
+	ctrlKey?: boolean;
+	altKey?: boolean;
+	shiftKey?: boolean;
+	action: (e: globalThis.KeyboardEvent) => void;
+}
+
+export const useGlobalShortcutKey = (shortcutKey: ShortcutKey[]) => {
 	let subscribed = false;
 	useEffect(() => {
 		if (subscribed) return;
 		subscribed = true;
 		const handleKeydown = (event: globalThis.KeyboardEvent) => {
-			if (event.key !== key) return;
-			const cancelTags = ["INPUT", "TEXTAREA", "EMBED"];
-			if (cancelTags.includes((event.target as HTMLElement).tagName)) return;
-			event.preventDefault();
-			action(event);
+			for (const shortcut of shortcutKey) {
+				if (
+					event.key !== shortcut.key ||
+					(event.ctrlKey || event.metaKey) !== !!shortcut.ctrlKey ||
+					event.altKey !== !!shortcut.altKey ||
+					event.shiftKey !== !!shortcut.shiftKey
+				)
+					continue;
+				const cancelTags = ["INPUT", "TEXTAREA", "EMBED"];
+				if (cancelTags.includes((event.target as HTMLElement).tagName)) continue;
+				event.preventDefault();
+				shortcut.action(event);
+			}
 		};
 
 		document.addEventListener("keydown", handleKeydown);
@@ -21,5 +34,5 @@ export const useGlobalShortcutKey = (
 		return () => {
 			document.removeEventListener("keydown", handleKeydown);
 		};
-	}, [key, action, subscribed]);
+	}, [shortcutKey, subscribed]);
 };
