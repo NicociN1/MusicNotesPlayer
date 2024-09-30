@@ -25,6 +25,7 @@ const GlobalContext = createContext(
 		getNote: (scoreId: number, id: number) => NoteProps | undefined;
 		removeNote: (scoreId: number, id: number) => void;
 		updateNote: (scoreId: number, noteProps: NoteProps) => void;
+		duplicateNote: (scoreId: number, noteId: number) => void;
 		scores: ScoreProps[];
 		setScores: React.Dispatch<React.SetStateAction<ScoreProps[]>>;
 		addScore: (scoreProps: ScoreProps) => void;
@@ -96,6 +97,19 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 			newScores[scoreIndex].notes = updatedNotes;
 			return newScores;
 		});
+	};
+	const duplicateNote = (scoreId: number, noteId: number) => {
+		const noteProps = getNote(scoreId, noteId);
+		if (!noteProps) return;
+		const newId = createNewId();
+
+		const newNote = {
+			...noteProps,
+			id: newId,
+			x: noteProps.x + noteProps.beatSize * noteProps.beatCount,
+			y: noteProps.y,
+		};
+		addNote(scoreId, newNote);
 	};
 
 	const addScore = (scoreProps: ScoreProps) => {
@@ -195,6 +209,7 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 				updateScore: updateScore,
 				getScore: getScore,
 				removeScore: removeScore,
+				duplicateNote: duplicateNote,
 				updateMainScore: updateMainScore,
 				getMainScore: getMainScore,
 				setMusicSettings: setMusicSettings,

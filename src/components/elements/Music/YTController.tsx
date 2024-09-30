@@ -1,3 +1,4 @@
+import { useGlobalShortcutKey } from "@/hooks/GlobalShortcutKey";
 import { useScoresGlobal } from "@/hooks/ScoresGlobal";
 import { useYouTubeGlobal } from "@/hooks/YouTubeGlobal";
 import { useYouTubeVolume } from "@/hooks/YouTubeVolumeProvider";
@@ -240,6 +241,20 @@ const YouTubeController = () => {
 		iFrame.getInternalPlayer().setVolume(volume);
 	};
 
+	useGlobalShortcutKey(" ", () => {
+		if (isPlaying) {
+			clickPause();
+		} else {
+			clickPlay();
+		}
+	});
+	useGlobalShortcutKey("ArrowLeft", () => {
+		clickRewind();
+	});
+	useGlobalShortcutKey("ArrowRight", () => {
+		clickForward();
+	});
+
 	return (
 		<YTControllerWrapper>
 			<RowContentsContainer>
@@ -253,21 +268,21 @@ const YouTubeController = () => {
 						</IconButton>
 					</Tooltip>
 				</Dropdown>
-				<Tooltip placement="top" title="Skip Rewind">
-					<IconButton aria-label="Skip Rewind" onClick={() => clickRewind()}>
+				<Tooltip placement="top" title="Skip Rewind (←)">
+					<IconButton aria-label="Skip Rewind (←)" onClick={() => clickRewind()}>
 						<FastRewindRounded sx={{ fontSize: "32px", color: "white" }} />
 					</IconButton>
 				</Tooltip>
-				<Tooltip placement="top" title={isPlaying ? "Pause" : "Play"}>
+				<Tooltip placement="top" title={`${isPlaying ? "Pause" : "Play"} (Space)`}>
 					{isPlaying ? (
-						<IconButton aria-label="Pause">
+						<IconButton aria-label="Pause (Space)">
 							<PauseRounded
 								sx={{ fontSize: "52px", color: "white" }}
 								onClick={() => clickPause()}
 							/>
 						</IconButton>
 					) : (
-						<IconButton aria-label="Play">
+						<IconButton aria-label="Play (Space)">
 							<PlayArrowRounded
 								sx={{ fontSize: "52px", color: "white" }}
 								onClick={() => clickPlay()}
@@ -275,8 +290,8 @@ const YouTubeController = () => {
 						</IconButton>
 					)}
 				</Tooltip>
-				<Tooltip placement="top" title="Skip Forward">
-					<IconButton aria-label="Skip Forward" onClick={() => clickForward()}>
+				<Tooltip placement="top" title="Skip Forward (→)">
+					<IconButton aria-label="Skip Forward (→)" onClick={() => clickForward()}>
 						<FastForward sx={{ fontSize: "32px", color: "white" }} />
 					</IconButton>
 				</Tooltip>

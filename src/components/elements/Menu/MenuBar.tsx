@@ -33,8 +33,8 @@ const ControlBarWrapper = styled.div`
 const ButtonGrid = styled.div`
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(auto-fill, 64px) 64px;
-  grid-template-rows: repeat(auto-fill, 64px);
+  grid-template-columns: repeat(auto-fill, 56px) 56px;
+  grid-template-rows: repeat(auto-fill, 56px);
 `;
 const YouTubeIframeContainer = styled.div`
   width: 100vw;

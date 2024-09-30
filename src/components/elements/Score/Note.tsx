@@ -3,11 +3,12 @@ import styled from "@emotion/styled";
 import { Delete, Palette } from "@mui/icons-material";
 import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import { Dropdown, MenuProps } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { isMobile } from "react-device-detect";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import { Resizable } from "react-resizable";
 import NoteContextMenu from "../ContextMenu/NoteContextMenu";
+import LabelEditDialog from "../Dialog/LabelEditDialog";
 import { NoteSvg } from "./NoteSvg";
 
 export interface NoteProps {
@@ -44,12 +45,13 @@ const NoteContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	outline: none;
   &:hover, &:active {
 		scale: 1.015;
   }
-	/* &:focus {
-		scale: 1.04;
-	} */
+	&:focus {
+		scale: 1.03;
+	}
 `;
 
 const Label = styled.div`
@@ -65,13 +67,16 @@ const Label = styled.div`
 `;
 
 const Note = (props: NoteProps) => {
-	const { updateNote, getNote } = useScoresGlobal();
+	const { updateNote, duplicateNote, removeNote } = useScoresGlobal();
 	const [isDragging, setIsDragging] = useState(false);
+	const isKeydown = useRef(false);
 
 	const [position, setPosition] = useState<{ x: number; y: number }>({
 		x: props.x,
 		y: props.y,
 	});
+	const containerRef = useRef<HTMLDivElement>(null);
+	const [labelDialogOpen, setLabelDialogOpen] = useState(false);
 
 	const handleDrag = (_e: DraggableEvent, data: DraggableData) => {
 		setPosition({ x: data.x, y: data.y });
@@ -80,6 +85,27 @@ const Note = (props: NoteProps) => {
 			x: data.x,
 			y: data.y,
 		});
+	};
+	const handleClick = (e: DraggableEvent) => {
+		setIsDragging(true);
+		setTimeout(() => {
+			if (containerRef.current) {
+				containerRef.current.focus();
+			}
+		}, 1);
+	};
+	const handleKeydown = (e: KeyboardEvent) => {
+		console.log("keydown", e.key, e.metaKey, e.key === "d" && (e.ctrlKey || e.metaKey));
+		if (isKeydown.current) return;
+		isKeydown.current = true;
+		if (e.key === "F2") {
+			setLabelDialogOpen(true);
+		} else if (e.key === "d") {
+			duplicateNote(props.scoreId, props.id);
+			e.preventDefault();
+		} else if (e.key === "Backspace") {
+			removeNote(props.scoreId, props.id);
+		}
 	};
 
 	const NoteBackground = styled.div`
@@ -95,57 +121,72 @@ const Note = (props: NoteProps) => {
 			content: "";
 			width: 100%;
 			height: 50%;
-			background-color: color-mix(in srgb, ${props.backgroundColor}, white 10%);
+			background-color: color-mix(in srgb, ${props.backgroundColor}, white 15%);
 		}
 	`;
 
 	return (
-		<Draggable
-			grid={[props.beatSize / 4, props.noteSize]}
-			position={position}
-			onDrag={handleDrag}
-			onStart={() => setIsDragging(true)}
-			onStop={() => setIsDragging(false)}
-			handle=".container"
-			bounds=".staff-container"
-		>
-			<NoteWrapper
-				style={{
-					width: props.beatSize * props.beatCount * (props.dotted ? 1.5 : 1) + 2,
-					height: props.noteSize,
+		<>
+			<LabelEditDialog
+				open={labelDialogOpen}
+				noteId={props.id}
+				scoreId={props.scoreId}
+				onOpenChange={(open) => {
+					setLabelDialogOpen(open);
 				}}
+			/>
+			<Draggable
+				grid={[props.beatSize / 4, props.noteSize]}
+				position={position}
+				onDrag={handleDrag}
+				onStart={handleClick}
+				onStop={() => setIsDragging(false)}
+				handle=".container"
+				bounds=".staff-container"
 			>
-				<NoteContextMenu noteId={props.id} scoreId={props.scoreId}>
-					<NoteContainer
-						className="container"
-						tabIndex={0}
-						style={{
-							opacity: isDragging ? 0.7 : 1,
-							zIndex: isDragging ? 10 : 0,
-						}}
-					>
-						<NoteBackground
+				<NoteWrapper
+					style={{
+						width: props.beatSize * props.beatCount * (props.dotted ? 1.5 : 1) + 2,
+						height: props.noteSize,
+					}}
+				>
+					<NoteContextMenu noteId={props.id} scoreId={props.scoreId}>
+						<NoteContainer
+							className="container"
+							ref={containerRef}
 							style={{
-								backgroundColor: props.backgroundColor,
-								boxShadow: isDragging
-									? "4px 4px 6px #00000088"
-									: // : "2px 2px 8px #00000088",
-										"",
+								opacity: isDragging ? 0.7 : 1,
+								zIndex: isDragging ? 10 : 0,
 							}}
-						/>
-						<Label
-							style={{
-								color: props.color,
-								fontSize: `${props.noteSize * 0.7 * props.fontScaleFactor}px`,
-								left: `${props.noteSize * 0.3}px`,
+							onKeyDown={handleKeydown}
+							onKeyUp={() => {
+								isKeydown.current = false;
 							}}
+							tabIndex={0}
 						>
-							{props.label}
-						</Label>
-					</NoteContainer>
-				</NoteContextMenu>
-			</NoteWrapper>
-		</Draggable>
+							<NoteBackground
+								style={{
+									backgroundColor: props.backgroundColor,
+									boxShadow: isDragging
+										? "4px 4px 6px #00000088"
+										: // : "2px 2px 8px #00000088",
+											"",
+								}}
+							/>
+							<Label
+								style={{
+									color: props.color,
+									fontSize: `${props.noteSize * 0.7 * props.fontScaleFactor}px`,
+									left: `${props.noteSize * 0.3}px`,
+								}}
+							>
+								{props.label}
+							</Label>
+						</NoteContainer>
+					</NoteContextMenu>
+				</NoteWrapper>
+			</Draggable>
+		</>
 	);
 };
 

@@ -106,7 +106,7 @@ interface ContextMenuProps {
 }
 
 const NoteContextMenu = (props: ContextMenuProps) => {
-	const { getNote, removeNote, updateNote, addNote, createNewId } = useScoresGlobal();
+	const { getNote, removeNote, updateNote, duplicateNote } = useScoresGlobal();
 
 	const handleChangeFontSize = (fontScale: number) => {
 		const noteProps = getNote(props.scoreId, props.noteId);
@@ -124,17 +124,7 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 		updateNote(props.scoreId, { ...noteProps, backgroundColor: color });
 	};
 	const handleDuplicate = () => {
-		const noteProps = getNote(props.scoreId, props.noteId);
-		if (!noteProps) return;
-		const newId = createNewId();
-
-		const newNote = {
-			...noteProps,
-			id: newId,
-			x: noteProps.x + noteProps.beatSize * noteProps.beatCount,
-			y: noteProps.y,
-		};
-		addNote(props.scoreId, newNote);
+		duplicateNote(props.scoreId, props.noteId);
 	};
 	const handleChangeBeat = (beat: number) => {
 		const noteProps = getNote(props.scoreId, props.noteId);
@@ -169,6 +159,7 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 						<ContextMenu.Item
 							className="radix-context-item"
 							onSelect={() => setLabelDialogOpen(true)}
+							title="テキストを編集 (F2)"
 						>
 							テキストを編集
 						</ContextMenu.Item>

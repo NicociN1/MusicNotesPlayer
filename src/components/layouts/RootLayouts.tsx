@@ -10,7 +10,7 @@ export const MenuBarLayout = styled.div`
   position: absolute;
   position: fixed;
   width: 100vw;
-  height: 70px;
+  height: 60px;
   top: 0;
   left: 0;
 `;
@@ -26,9 +26,9 @@ export const MusicControlBarLayout = styled.div`
 
 export const ScoresLayout = styled.div`
   width: 100vw;
-  height: calc(100vh - 70px - 100px);
+  height: calc(100vh - 60px - 100px);
   position: absolute;
-  top: 70px;
+  top: 60px;
   overflow: scroll;
 `;
 
