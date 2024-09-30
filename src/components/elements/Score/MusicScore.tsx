@@ -11,8 +11,7 @@ const MusicScoreWrapper = styled.div`
 	position: relative;
 `;
 const MusicScore = () => {
-	const { scores, setScores } = useScoresGlobal();
-	const targetRef = useRef<HTMLDivElement>(null);
+	const { scores } = useScoresGlobal();
 
 	return (
 		<MusicScoreWrapper>

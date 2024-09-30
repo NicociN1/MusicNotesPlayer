@@ -5,30 +5,26 @@ export const RootLayout = styled.div`
   width: 100vw;
 `;
 
+export const ContentsLayout = styled.div`
+  width: 100vw;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 60px 1fr 100px;
+  @media screen and (max-height: 460px) {
+    grid-template-rows: 40px 1fr 70px;
+  }
+`;
+
 export const MenuBarLayout = styled.div`
   z-index: 10;
-  position: absolute;
-  position: fixed;
-  width: 100vw;
-  height: 60px;
-  top: 0;
-  left: 0;
 `;
 
 export const MusicControlBarLayout = styled.div`
-  width: 100vw;
-  height: 100px;
   display: flex;
   justify-content: center;
-  position: absolute;
-  bottom: 0px;
 `;
 
 export const ScoreSpaceLayout = styled.div`
-  width: 100vw;
-  height: calc(100% - 60px - 100px);
-  position: absolute;
-  top: 60px;
   overflow: scroll;
 `;
 

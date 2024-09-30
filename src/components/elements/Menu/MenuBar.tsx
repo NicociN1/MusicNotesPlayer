@@ -24,6 +24,10 @@ const ButtonGrid = styled.div`
   justify-content: center;
   grid-template-columns: repeat(auto-fill, 56px) 56px;
   grid-template-rows: repeat(auto-fill, 56px);
+  @media screen and (max-height: 460px) {
+    grid-template-columns: repeat(auto-fill, 40px) 40px;
+    grid-template-rows: repeat(auto-fill, 40px);
+	}
 `;
 const YouTubeIframeContainer = styled.div`
   width: 100vw;

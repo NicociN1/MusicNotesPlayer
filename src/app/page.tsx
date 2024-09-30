@@ -4,6 +4,7 @@ import MusicControlBar from "@/components/elements/Music/MusicControlBar";
 import MusicScore from "@/components/elements/Score/MusicScore";
 import Score from "@/components/elements/Score/Score";
 import {
+	ContentsLayout,
 	MenuBarLayout,
 	MusicControlBarLayout,
 	RootLayout,
@@ -41,18 +42,20 @@ function App(): JSX.Element {
 				<ThemeProvider theme={theme}>
 					<UIVisibilityProvider>
 						<ContentProvider>
-							<MenuBarLayout>
-								<MenuBar /> {/* ControlBar */}
-							</MenuBarLayout>
-							<ScoreSpaceLayout
-								id="scores-layout"
-								onContextMenu={(e) => e.preventDefault()}
-							>
-								<MusicScore />
-							</ScoreSpaceLayout>
-							<MusicControlBarLayout>
-								<MusicControlBar /> {/* MusicControlBar */}
-							</MusicControlBarLayout>
+							<ContentsLayout>
+								<MenuBarLayout>
+									<MenuBar /> {/* ControlBar */}
+								</MenuBarLayout>
+								<ScoreSpaceLayout
+									id="scores-layout"
+									onContextMenu={(e) => e.preventDefault()}
+								>
+									<MusicScore />
+								</ScoreSpaceLayout>
+								<MusicControlBarLayout>
+									<MusicControlBar /> {/* MusicControlBar */}
+								</MusicControlBarLayout>
+							</ContentsLayout>
 						</ContentProvider>
 					</UIVisibilityProvider>
 				</ThemeProvider>

@@ -34,6 +34,9 @@ const YTControllerWrapper = styled.div`
 	grid-template-rows: 64px 1fr;
 	grid-template-columns: 1fr;
   place-items: center;
+  @media screen and (max-height: 460px) {
+		grid-template-rows: 40px 1fr;
+	}
 `;
 
 const RowContentsContainer = styled.div`
@@ -41,6 +44,17 @@ const RowContentsContainer = styled.div`
   display: flex;
 	justify-content: center;
 	align-items: center;
+  @media screen and (max-height: 460px) {
+		scale: 0.8;
+	}
+`;
+const ProgressSlider = styled(Slider)`
+	max-width: max(calc(80%), 300px);
+	color: white;
+	padding: 0 !important;
+  @media screen and (max-height: 460px) {
+		scale: 0.8;
+	}
 `;
 
 const AnimateSlider = styled(Slider)`
@@ -360,15 +374,11 @@ const YouTubeController = () => {
 				title={`${timeFormat(Math.floor(sliderTime))} / -${timeFormat(Math.floor((iFrameRef.current?.getDuration() ?? 0) - sliderTime))}`}
 				placement="top"
 			>
-				<Slider
+				<ProgressSlider
 					value={sliderTime}
 					max={iFrameRef.current?.getDuration() ?? 0}
 					onChange={(ev, data) => sliderSeek(data as number)}
 					onChangeCommitted={(ev, data) => sliderSeekEnd(data as number)}
-					sx={{
-						maxWidth: "max(calc(80%), 300px)",
-						color: "white",
-					}}
 				/>
 			</Tooltip>
 		</YTControllerWrapper>
