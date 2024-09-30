@@ -42,9 +42,14 @@ const MenuBar = () => {
 	const { jsonImport, jsonExport } = useScoresGlobal();
 	const { iFrameRef } = useYouTubeGlobal();
 
-	useGlobalShortcutKey("m", () => {
-		setOpen(!isOpened);
-	});
+	useGlobalShortcutKey([
+		{
+			key: "m",
+			action: () => {
+				setOpen(!isOpened);
+			},
+		},
+	]);
 
 	return (
 		<ControlBarWrapper style={{ maxHeight: isOpened ? "400px" : "100%" }}>
