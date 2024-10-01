@@ -18,6 +18,7 @@ const ControlBarWrapper = styled.div`
   position: relative;
   display: block;
   padding-bottom: 16px;
+	z-index: 2;
 `;
 const ButtonGrid = styled.div`
   display: grid;
