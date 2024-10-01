@@ -9,7 +9,7 @@
     "lint": "biome lint --apply .",
     "format": "biome format .",
     "check": "biome check --apply .",
-    "commit": "git add . && cz && echo Please run [git push -u origin main]",
+    "commit": "git add . && cz",
     "push": "git push -u origin main"
   },
   "dependencies": {

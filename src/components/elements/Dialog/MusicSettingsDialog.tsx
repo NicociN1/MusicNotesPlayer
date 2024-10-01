@@ -50,6 +50,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 								bpmValueRef.current = v;
 							}}
 							style={{ width: "100%" }}
+							step={1}
 						/>
 						YouTubeURL
 						<Input
@@ -68,6 +69,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 								startTimeValueRef.current = v;
 							}}
 							style={{ width: "100%" }}
+							min={0}
 						/>
 					</div>
 
