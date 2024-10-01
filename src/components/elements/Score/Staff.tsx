@@ -31,7 +31,7 @@ const VerticalLine = styled.div`
 	width: 2px;
 	position: absolute;
 	left: 0;
-	transition: 0.2s left;
+	transition: 0.3s left;
 	z-index: 1;
 `;
 
