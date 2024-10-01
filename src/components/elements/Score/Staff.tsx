@@ -28,11 +28,10 @@ const Line = styled.div`
 const VerticalLine = styled.div`
 	background-color: red;
 	height: 100%;
-	width: 3px;
+	width: 2px;
 	position: absolute;
 	left: 0;
 	transition: 0.2s left;
-	opacity: 0.5;
 	z-index: 1;
 `;
 
