@@ -235,6 +235,7 @@ const YouTubeController = () => {
 		if (!mainScore || !isPlaying || delayedTime < 0) return;
 		const beatTime = 60 / musicSettings.bpm;
 		const currentMeasureCount = Math.floor(delayedTime / beatTime / mainScore.beatCount);
+		if (currentMeasureCount >= mainScore.measureCount) return;
 		if (
 			lastMeasureCount.current !== currentMeasureCount &&
 			lastMeasureCount.current >= 0
