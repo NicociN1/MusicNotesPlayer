@@ -19,7 +19,6 @@ const Context = createContext(
 		onPlayerStateChange: MutableRefObject<((state: number) => void) | null>;
 		currentTime: number;
 		setCurrentTime: React.Dispatch<React.SetStateAction<number>>;
-		setDuration: React.Dispatch<React.SetStateAction<number>>;
 		title: MutableRefObject<string>;
 	},
 );
@@ -30,7 +29,6 @@ export const YouTubeGlobalProvider = ({ children }: { children: React.ReactNode 
 	const onProgress = useRef(null);
 	const onPlayerStateChange = useRef(null);
 	const [currentTime, setCurrentTime] = useState(0);
-	const [duration, setDuration] = useState(0);
 	const title = useRef("");
 
 	useEffect(() => {
@@ -50,7 +48,6 @@ export const YouTubeGlobalProvider = ({ children }: { children: React.ReactNode 
 				onPlayerStateChange: onPlayerStateChange,
 				currentTime: currentTime,
 				setCurrentTime: setCurrentTime,
-				setDuration: setDuration,
 				title: title,
 			}}
 		>

@@ -1,20 +1,12 @@
 import { useScoresGlobal } from "@/hooks/ScoresGlobal";
+import { useYouTubeGlobal } from "@/hooks/YouTubeGlobal";
 import styled from "@emotion/styled";
-import {
-	DragHandle,
-	DragIndicator,
-	PanTool,
-	Settings,
-	Star,
-	StarBorder,
-} from "@mui/icons-material";
-import { Input } from "antd";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { Settings } from "@mui/icons-material";
+import { useRef, useState } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
-import ScoreContextMenu from "../ContextMenu/ScoreContextMenu";
 import ScoreEditDialog from "../Dialog/ScoreEditDialog";
 import Note, { NoteProps } from "./Note";
-import Staff, { StaffProps } from "./Staff";
+import Staff from "./Staff";
 
 const DraggableWrapper = styled.div`
 	border: solid 1px lightgrey;

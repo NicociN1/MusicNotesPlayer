@@ -11,17 +11,32 @@ export interface StaffProps {
 	scoreId: number;
 }
 
-const DurationLine = styled.div`
+const Line = styled.div`
+border-right: solid 4px black;
+&:hover {
+	background-color: #00000022;
+}
+&::before {
+	content: "";
+	display: block;
+	width: 100%;
+	position: relative;
+	top: 50%;
+	border-top: solid 2px black;
+}
+`;
+const VerticalLine = styled.div`
+	background-color: red;
 	height: 100%;
-	border-left: solid 2px red;
-	transition: 0.2s translate;
+	width: 3px;
 	position: absolute;
-	top: 0;
 	left: 0;
+	transition: 0.2s left;
+	opacity: 0.8;
 `;
 
 const Staff = (props: StaffProps) => {
-	const { createNewId: createId, addNote, getScore } = useScoresGlobal();
+	const { createNewId: createId, addNote, getScore, lineRef } = useScoresGlobal();
 
 	const StaffWrapper = styled.div`
     display: grid;
@@ -31,23 +46,10 @@ const Staff = (props: StaffProps) => {
 		width: 100%;
 		height: 100%;
   `;
-	const Line = styled.div`
-    border-right: solid 4px black;
-		&:hover {
-			background-color: #00000022;
-		}
-		&::before {
-			content: "";
-			display: block;
-			width: 100%;
-			position: relative;
-			top: 50%;
-			border-top: solid 2px black;
-		}
-  `;
 
 	return (
 		<StaffWrapper>
+			{getScore(props.scoreId)?.mainScore ? <VerticalLine ref={lineRef} /> : null}
 			{Array.from({ length: props.measureCount * props.lineCount }, (_v, index) => {
 				const row = (index % props.measureCount) * props.beatCount;
 				const column = Math.floor(index / props.measureCount);

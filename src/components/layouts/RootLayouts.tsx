@@ -16,7 +16,6 @@ export const ContentsLayout = styled.div`
 `;
 
 export const MenuBarLayout = styled.div`
-  z-index: 10;
 `;
 
 export const MusicControlBarLayout = styled.div`

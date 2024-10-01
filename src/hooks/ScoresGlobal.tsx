@@ -3,7 +3,7 @@ import { NoteProps } from "@/components/elements/Score/Note";
 import { ScoreProps } from "@/components/elements/Score/Score";
 import { download, upload } from "@/utils/fileManager";
 import PropTypes from "prop-types";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
 import { useYouTubeGlobal } from "./YouTubeGlobal";
 
 let currentId = 0;
@@ -31,6 +31,7 @@ const GlobalContext = createContext(
 		musicSettings: MusicSettings;
 		jsonImport: () => void;
 		jsonExport: (fileName: string) => void;
+		lineRef: React.MutableRefObject<HTMLDivElement | null>;
 	},
 );
 
@@ -48,6 +49,7 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 		youtubeUrl: "https://youtube.com/watch?v=0xSiBpUdW4E",
 		startTime: 2.5,
 	});
+	const lineRef = useRef<HTMLDivElement | null>(null);
 
 	const addNote = (scoreId: number, noteProps: NoteProps) => {
 		let added = false;
@@ -209,6 +211,7 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 				musicSettings: musicSettings,
 				jsonImport: jsonImport,
 				jsonExport: jsonExport,
+				lineRef: lineRef,
 			}}
 		>
 			{children}

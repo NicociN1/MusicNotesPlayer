@@ -98,7 +98,7 @@ const YouTubeController = () => {
 	const [isVisibleVolume, setVisibleVolume] = useState<boolean>(false);
 	const { iFrameRef, onProgress, onPlayerStateChange } = useYouTubeGlobal();
 	const beforePlaying = useRef<boolean | null>(null);
-	const { getMainScore, musicSettings: saveData } = useScoresGlobal();
+	const { getMainScore, musicSettings, lineRef } = useScoresGlobal();
 	const lastMeasureCount = useRef(0);
 
 	const items: MenuProps["items"] = [
@@ -231,16 +231,24 @@ const YouTubeController = () => {
 	onProgress.current = (time: number) => {
 		setSliderTime(time);
 		const mainScore = getMainScore();
-		const delayedTime = time - saveData.startTime;
+		const delayedTime = time - musicSettings.startTime;
 		if (!mainScore || !isPlaying || delayedTime < 0) return;
-		const beatTime = 60 / saveData.bpm;
+		const beatTime = 60 / musicSettings.bpm;
 		const currentMeasureCount = Math.floor(delayedTime / beatTime / mainScore.beatCount);
 		if (
 			lastMeasureCount.current !== currentMeasureCount &&
 			lastMeasureCount.current >= 0
 		) {
 			lastMeasureCount.current = currentMeasureCount;
-			scoreScroller(saveData.bpm, delayedTime, mainScore);
+			scoreScroller(musicSettings.bpm, delayedTime, mainScore);
+		}
+		const line = lineRef.current;
+		if (line) {
+			console.log(
+				mainScore.beatSize * mainScore.beatCount,
+				delayedTime / ((musicSettings.bpm / 60) * mainScore.beatCount),
+			);
+			line.style.left = `${mainScore.beatSize * mainScore.beatCount * (delayedTime / ((60 / musicSettings.bpm) * mainScore.beatCount))}px`;
 		}
 	};
 	onPlayerStateChange.current = (state: number) => {
@@ -279,7 +287,7 @@ const YouTubeController = () => {
 			action: () => {
 				const iFrame = iFrameRef.current;
 				if (!iFrame) return;
-				const changedVolume = Math.max(0, volume - 10);
+				const changedVolume = Math.max(0, volume - 5);
 				setVolume(changedVolume);
 				iFrame.getInternalPlayer().setVolume(changedVolume);
 			},
@@ -290,7 +298,7 @@ const YouTubeController = () => {
 			action: () => {
 				const iFrame = iFrameRef.current;
 				if (!iFrame) return;
-				const changedVolume = Math.max(0, volume + 10);
+				const changedVolume = Math.max(0, volume + 5);
 				setVolume(changedVolume);
 				iFrame.getInternalPlayer().setVolume(changedVolume);
 			},

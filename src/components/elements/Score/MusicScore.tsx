@@ -1,8 +1,6 @@
 "use client";
 import { useScoresGlobal } from "@/hooks/ScoresGlobal";
 import styled from "@emotion/styled";
-import { useRef } from "react";
-import { animateScroll, scroller } from "react-scroll";
 import Score from "./Score";
 
 const MusicScoreWrapper = styled.div`
