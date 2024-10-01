@@ -25,6 +25,7 @@ export const MusicControlBarLayout = styled.div`
 
 export const ScoreSpaceLayout = styled.div`
   overflow: scroll;
+  scrollbar-color: #111 white;
 `;
 
 export const YouTubePlayerLayout = styled.div`

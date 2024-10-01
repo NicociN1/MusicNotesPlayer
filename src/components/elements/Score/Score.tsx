@@ -106,7 +106,7 @@ const Score = (props: ScoreProps) => {
 			>
 				<DraggableWrapper
 					style={{
-						boxShadow: `0 0 ${isDragging ? 30 : 10}px -2px #00000088`,
+						boxShadow: `0 0 ${isDragging ? 16 : 10}px ${isDragging ? 2 : 0}px #00000088`,
 						backgroundColor: isDragging ? "#ffffff88" : "white",
 						zIndex: isDragging ? 1 : 0,
 					}}

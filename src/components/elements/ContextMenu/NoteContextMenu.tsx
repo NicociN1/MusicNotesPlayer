@@ -348,7 +348,7 @@ const NoteContextMenu = (props: ContextMenuProps) => {
 							onClick={() => removeNote(props.scoreId, props.noteId)}
 							style={{ color: "red" }}
 						>
-							削除 (Back)
+							削除 (Backspace)
 						</ContextMenu.Item>
 					</ContextMenu.Content>
 				</ContextMenu.Portal>
