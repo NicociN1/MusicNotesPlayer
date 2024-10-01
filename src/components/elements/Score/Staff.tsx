@@ -12,18 +12,18 @@ export interface StaffProps {
 }
 
 const Line = styled.div`
-border-right: solid 4px black;
-&:hover {
-	background-color: #00000022;
-}
-&::before {
-	content: "";
-	display: block;
-	width: 100%;
-	position: relative;
-	top: 50%;
-	border-top: solid 2px black;
-}
+	border-right: solid 4px black;
+	&:hover {
+		background-color: #00000022;
+	}
+	&::before {
+		content: "";
+		display: block;
+		width: 100%;
+		position: relative;
+		top: 50%;
+		border-top: solid 2px black;
+	}
 `;
 const VerticalLine = styled.div`
 	background-color: red;
@@ -32,7 +32,8 @@ const VerticalLine = styled.div`
 	position: absolute;
 	left: 0;
 	transition: 0.2s left;
-	opacity: 0.8;
+	opacity: 0.5;
+	z-index: 1;
 `;
 
 const Staff = (props: StaffProps) => {
