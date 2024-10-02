@@ -39,6 +39,7 @@ export interface MusicSettings {
 	bpm: number;
 	youtubeUrl: string;
 	startTime: number;
+	showVerticalLine: boolean;
 }
 
 export const MusicScoresProvider = ({ children }: { children: React.ReactNode }) => {
@@ -48,6 +49,7 @@ export const MusicScoresProvider = ({ children }: { children: React.ReactNode })
 		bpm: 106,
 		youtubeUrl: "https://youtube.com/watch?v=0xSiBpUdW4E",
 		startTime: 2.5,
+		showVerticalLine: true,
 	});
 	const lineRef = useRef<HTMLDivElement | null>(null);
 

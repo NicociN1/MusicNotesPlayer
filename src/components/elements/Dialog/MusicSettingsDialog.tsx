@@ -10,17 +10,18 @@ interface MusicSettingsDialog {
 }
 
 const MusicSettingsDialog = (props: MusicSettingsDialog) => {
-	const { musicSettings: saveData, setMusicSettings: setSaveData } = useScoresGlobal();
-	const bpmValueRef = useRef<number>(saveData.bpm);
-	const youtubeUrlValueRef = useRef<string>(saveData.youtubeUrl);
-	const startTimeValueRef = useRef<number>(saveData.startTime);
+	const { musicSettings, setMusicSettings } = useScoresGlobal();
+	const bpmValueRef = useRef<number>(musicSettings.bpm);
+	const youtubeUrlValueRef = useRef<string>(musicSettings.youtubeUrl);
+	const startTimeValueRef = useRef<number>(musicSettings.startTime);
+	const showVerticalLineValueRef = useRef<boolean>(musicSettings.showVerticalLine);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (props.open) {
-			bpmValueRef.current = saveData.bpm;
-			youtubeUrlValueRef.current = saveData.youtubeUrl;
-			startTimeValueRef.current = saveData.startTime;
+			bpmValueRef.current = musicSettings.bpm;
+			youtubeUrlValueRef.current = musicSettings.youtubeUrl;
+			startTimeValueRef.current = musicSettings.startTime;
 		}
 	}, [props.open]);
 
@@ -44,7 +45,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 					<div className="radix-dialog-inputgroup">
 						BPM
 						<InputNumber
-							defaultValue={saveData.bpm}
+							defaultValue={musicSettings.bpm}
 							onChange={(v) => {
 								if (!v) return;
 								bpmValueRef.current = v;
@@ -54,7 +55,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 						/>
 						YouTubeURL
 						<Input
-							defaultValue={saveData.youtubeUrl}
+							defaultValue={musicSettings.youtubeUrl}
 							onChange={(v) => {
 								if (!v) return;
 								youtubeUrlValueRef.current = v.target.value;
@@ -63,7 +64,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 						/>
 						開始までの時間
 						<InputNumber
-							defaultValue={saveData.startTime}
+							defaultValue={musicSettings.startTime}
 							onChange={(v) => {
 								if (!v) return;
 								startTimeValueRef.current = v;
@@ -71,6 +72,13 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 							style={{ width: "100%" }}
 							min={0}
 						/>
+						現在位置の線を表示
+						{/* <Checkbox
+							defaultChecked={musicSettings.showVerticalLine ?? true}
+							onChange={(e) => {
+								showVerticalLineValueRef.current = e.target.checked;
+							}}
+						/> */}
 					</div>
 
 					<div className="radix-dialog-actiongroup">
@@ -83,7 +91,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
 								newSaveData.youtubeUrl = youtubeUrlValueRef.current;
 								newSaveData.startTime = startTimeValueRef.current;
 
-								setSaveData(newSaveData);
+								setMusicSettings(newSaveData);
 								handleClose();
 							}}
 						>
