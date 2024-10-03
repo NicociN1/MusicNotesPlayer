@@ -54,6 +54,7 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
               }}
               style={{ width: "100%" }}
               step={1}
+              min={1}
             />
             YouTubeURL
             <Input
@@ -72,7 +73,6 @@ const MusicSettingsDialog = (props: MusicSettingsDialog) => {
                 startTimeValueRef.current = v;
               }}
               style={{ width: "100%" }}
-              min={0}
             />
             現在位置の線を表示
             {/* <Checkbox
