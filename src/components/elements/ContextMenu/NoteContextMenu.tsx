@@ -159,9 +159,9 @@ const NoteContextMenu = (props: ContextMenuProps) => {
             <ContextMenu.Item
               className="radix-context-item"
               onSelect={() => setLabelDialogOpen(true)}
-              title="テキストを編集 (Enter)"
+              title="テキストを編集 (F2)"
             >
-              テキストを編集 (Enter)
+              テキストを編集 (F2)
             </ContextMenu.Item>
 
             <ContextMenu.Sub>
