@@ -17,6 +17,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
 	title: "Music Notes",
 	description: "楽譜やYouTube動画などを設定でき、楽器の練習ができるサイトです。YouTube動画に合わせて楽譜が動き、楽しく練習することが出来ます。",
+	keywords: "music notes practice youtube"
 };
 
 export default function RootLayout({
