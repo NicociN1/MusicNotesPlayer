@@ -1,7 +1,7 @@
 const sleep = async (timeout: number): Promise<null> => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, timeout)
-  })
-}
+	return new Promise((resolve) => {
+		setTimeout(resolve, timeout);
+	});
+};
 
-export default sleep
+export default sleep;

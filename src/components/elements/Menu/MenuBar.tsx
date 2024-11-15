@@ -7,18 +7,17 @@ import { IconButton, Tooltip } from "@mui/material";
 import { useState } from "react";
 import MusicSettingsDialog from "../Dialog/MusicSettingsDialog";
 import ScoreEditDialog from "../Dialog/ScoreEditDialog";
-import { ScoreProps } from "../Score/Score";
 import YouTubeIFrame from "./YTIFrame";
 
 const ControlBarWrapper = styled.div`
   width: 100vw;
   background-color: #111;
-  box-shadow: 0 0 8px #111;
+  box-shadow: 0 0 6px #111;
   transition: 0.3s max-height ease-out;
   position: relative;
   display: block;
-  padding-bottom: 16px;
 	z-index: 2;
+	overflow: clip;
 `;
 const ButtonGrid = styled.div`
   display: grid;
@@ -38,6 +37,7 @@ const YouTubeIframeContainer = styled.div`
   align-items: center;
   opacity: 1;
   transition: 0.15s opacity;
+	padding-bottom: 8px;
 `;
 
 const MenuBar = () => {
@@ -57,7 +57,10 @@ const MenuBar = () => {
 	]);
 
 	return (
-		<ControlBarWrapper style={{ maxHeight: isOpened ? "400px" : "100%" }}>
+		<ControlBarWrapper
+			className="control-bar"
+			style={{ maxHeight: isOpened ? "400px" : "100%" }}
+		>
 			<ScoreEditDialog
 				isEditor={false}
 				open={scoreDialogOpen}
@@ -125,9 +128,7 @@ const MenuBar = () => {
 					</IconButton>
 				</Tooltip>
 			</ButtonGrid>
-			<YouTubeIframeContainer
-				style={isOpened ? {} : { pointerEvents: "none", opacity: 0 }}
-			>
+			<YouTubeIframeContainer>
 				<YouTubeIFrame />
 			</YouTubeIframeContainer>
 		</ControlBarWrapper>

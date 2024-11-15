@@ -7,10 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome lint --apply .",
-    "format": "biome format .",
+    "format": "npx @biomejs/biome format --write src",
     "check": "biome check --apply .",
     "commit": "git add . && cz",
-    "push": "git push -u origin main"
+    "push": "git push -u origin main",
+		"generate-sitemap": "next-sitemap"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -24,6 +25,7 @@
     "antd": "^5.20.6",
     "get-youtube-id": "^1.0.1",
     "next": "14.2.13",
+    "next-sitemap": "^4.2.3",
     "react": "^18",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18",

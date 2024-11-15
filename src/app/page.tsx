@@ -2,10 +2,8 @@
 import MenuBar from "@/components/elements/Menu/MenuBar";
 import MusicControlBar from "@/components/elements/Music/MusicControlBar";
 import MusicScore from "@/components/elements/Score/MusicScore";
-import Score from "@/components/elements/Score/Score";
 import {
 	ContentsLayout,
-	MenuBarLayout,
 	MusicControlBarLayout,
 	RootLayout,
 	ScoreSpaceLayout,
@@ -18,47 +16,47 @@ import { YouTubeVolumeProvider } from "@/hooks/YouTubeVolumeProvider";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useEffect } from "react";
 
-const ContentProvider = ({ children }: { children: React.ReactNode }) => {
-	return (
-		<ScrollProvider>
-			<MusicScoresProvider>
-				<YouTubeGlobalProvider>
-					<YouTubeVolumeProvider>{children}</YouTubeVolumeProvider>
-				</YouTubeGlobalProvider>
-			</MusicScoresProvider>
-		</ScrollProvider>
-	);
-};
 const theme = createTheme({
 	palette: {
 		mode: "dark",
 	},
 });
+const ContentProvider = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<ThemeProvider theme={theme}>
+			<UIVisibilityProvider>
+				<ScrollProvider>
+					<MusicScoresProvider>
+						<YouTubeGlobalProvider>
+							<YouTubeVolumeProvider>{children}</YouTubeVolumeProvider>
+						</YouTubeGlobalProvider>
+					</MusicScoresProvider>
+				</ScrollProvider>
+			</UIVisibilityProvider>
+		</ThemeProvider>
+	);
+};
 
 function App(): JSX.Element {
 	return (
 		<>
 			<RootLayout>
-				<ThemeProvider theme={theme}>
-					<UIVisibilityProvider>
-						<ContentProvider>
-							<ContentsLayout>
-								<MenuBarLayout>
-									<MenuBar /> {/* ControlBar */}
-								</MenuBarLayout>
-								<ScoreSpaceLayout
-									id="scores-layout"
-									onContextMenu={(e) => e.preventDefault()}
-								>
-									<MusicScore />
-								</ScoreSpaceLayout>
-								<MusicControlBarLayout>
-									<MusicControlBar /> {/* MusicControlBar */}
-								</MusicControlBarLayout>
-							</ContentsLayout>
-						</ContentProvider>
-					</UIVisibilityProvider>
-				</ThemeProvider>
+				<ContentProvider>
+					<ContentsLayout>
+						<div>
+							<MenuBar /> {/* ControlBar */}
+						</div>
+						<ScoreSpaceLayout
+							id="scores-layout"
+							onContextMenu={(e) => e.preventDefault()}
+						>
+							<MusicScore />
+						</ScoreSpaceLayout>
+						<MusicControlBarLayout>
+							<MusicControlBar /> {/* MusicControlBar */}
+						</MusicControlBarLayout>
+					</ContentsLayout>
+				</ContentProvider>
 			</RootLayout>
 		</>
 	);

@@ -9,13 +9,10 @@ export const ContentsLayout = styled.div`
   width: 100vw;
   height: 100%;
   display: grid;
-  grid-template-rows: 60px 1fr 100px;
+  grid-template-rows: 56px 1fr 100px;
   @media screen and (max-height: 460px) {
     grid-template-rows: 40px 1fr 70px;
   }
-`;
-
-export const MenuBarLayout = styled.div`
 `;
 
 export const MusicControlBarLayout = styled.div`

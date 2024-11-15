@@ -1,0 +1,10 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /*
+
+# Host
+Host: https://musicnotes.sytes.net/
+
+# Sitemaps
+Sitemap: https://musicnotes.sytes.net/sitemap.xml
